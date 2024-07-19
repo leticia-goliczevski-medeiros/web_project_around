@@ -1,25 +1,38 @@
-let editProfileButton = document.querySelector(".profile__edit-icon");
-let closeButton = document.querySelector(".edit-profile__close-icon");
+const editProfileButton = document.querySelector(".profile__edit-icon");
+const closeButton = document.querySelector(".popup__close-icon");
 
-function editProfile() {
-  let editProfileSection = document.querySelector(".edit-profile");
-  editProfileSection.classList.toggle("edit-profile_popup_opened");
+function openClosePopup() {
+  const editProfileSection = document.querySelector(".popup");
+  editProfileSection.classList.toggle("popup_popup_opened");
 }
-editProfileButton.addEventListener("click", editProfile);
-closeButton.addEventListener("click", editProfile);
+editProfileButton.addEventListener("click", openClosePopup);
+closeButton.addEventListener("click", openClosePopup);
 
-let formElement = document.querySelector(".edit-profile__form");
+const nameInput = document.querySelector(".popup__input_name");
+const aboutInput = document.querySelector(".popup__input_about");
+let nameInputValue = nameInput.value;
+let aboutInputValue = aboutInput.value;
 
+const profileName = document.querySelector(".profile__name");
+const profileDescription = document.querySelector(".profile__description");
+profileName.textContent = nameInput.value;
+profileDescription.textContent = aboutInput.value;
+
+const formElement = document.querySelector(".popup__form");
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
 
-  let nameInput = document.querySelector(".edit-profile__input_name");
-  let aboutInput = document.querySelector(".edit-profile__input_about");
   let nameInputValue = nameInput.value;
   let aboutInputValue = aboutInput.value;
 
-  document.querySelector(".profile__name").textContent = nameInputValue;
-  document.querySelector(".profile__description").textContent = aboutInputValue;
-  editProfile();
+  profileName.textContent = nameInputValue;
+  profileDescription.textContent = aboutInputValue;
+  openClosePopup();
 }
 formElement.addEventListener("submit", handleProfileFormSubmit);
+
+document.querySelector(".popup").addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    handleProfileFormSubmit();
+  }
+});

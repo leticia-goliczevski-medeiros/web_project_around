@@ -42,3 +42,26 @@
   width: 21px;
   height: 19px;
 }
+.gallery__heart-icon:hover {
+  cursor: pointer;
+  opacity: 0.5;
+}
+@media screen and (max-width: 1024px) {
+  .gallery {
+    padding-top: 45px;
+    max-width: 580px;
+  }
+  .gallery__cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media screen and (max-width: 720px) {
+  .gallery {
+    padding-top: 36px;
+    max-width: 282px;
+  }
+  .gallery__cards {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 20px;
+  }
+}

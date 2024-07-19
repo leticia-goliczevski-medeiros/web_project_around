@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,7 +9,7 @@
     />
     <meta name="keywords" content="Rede social, fotos, galeria" />
     <meta name="author" content="Letícia Goliczevski Medeiros" />
-    <title>Around</title>
+    <title>Around the U.S.</title>
     <link rel="stylesheet" href="./pages/index.css" />
   </head>
   <body>
@@ -18,7 +18,7 @@
         <img
           class="header__logo"
           src="./images/around.png"
-          alt="Logo escrito 'Around the U.S."
+          alt="Logo escrito 'Around the U.S.'"
         />
       </header>
 
@@ -31,20 +31,22 @@
           />
           <div class="profile__information">
             <div class="profile__name-and-icon">
-              <h1 class="profile__name">Jacques Cousteau</h1>
+              <h1 class="profile__name"></h1>
               <img
                 class="profile__edit-icon"
                 src="./images/edit-button.png"
                 alt="Ícone de editar."
               />
             </div>
-            <p class="profile__description">Explorador</p>
+            <p class="profile__description"></p>
           </div>
-          <img
-            class="profile__add-button"
-            src="./images/add-button.png"
-            alt="Botão de adicionar."
-          />
+          <button class="profile__add-button">
+            <img
+              class="profile__add-button-plus-sign"
+              src="./images/plus-sign.png"
+              alt="Ícone de adicionar."
+            />
+          </button>
         </section>
 
         <section class="gallery">
@@ -60,7 +62,7 @@
                 <img
                   class="gallery__heart-icon"
                   src="./images/heart-icon.png"
-                  alt="Ícone de coação."
+                  alt="Ícone de coração."
                 />
               </div>
             </li>
@@ -75,7 +77,7 @@
                 <img
                   class="gallery__heart-icon"
                   src="./images/heart-icon.png"
-                  alt="Ícone de coação."
+                  alt="Ícone de coração."
                 />
               </div>
             </li>
@@ -83,14 +85,14 @@
               <img
                 class="gallery__card-image"
                 src="./images/yellowstone-national-park.jpg"
-                alt="Fonte termal com pinheiros e um céu azul ao fundo."
+                alt="Fonte termal com árvores e céu azul ao fundo."
               />
               <div class="gallery__card-info">
                 <h2 class="gallery__card-title">Parque Nacional Yellowstone</h2>
                 <img
                   class="gallery__heart-icon"
                   src="./images/heart-icon.png"
-                  alt="Ícone de coação."
+                  alt="Ícone de coração."
                 />
               </div>
             </li>
@@ -107,7 +109,7 @@
                 <img
                   class="gallery__heart-icon"
                   src="./images/heart-icon.png"
-                  alt="Ícone de coação."
+                  alt="Ícone de coração."
                 />
               </div>
             </li>
@@ -122,7 +124,7 @@
                 <img
                   class="gallery__heart-icon"
                   src="./images/heart-icon.png"
-                  alt="Ícone de coação."
+                  alt="Ícone de coração."
                 />
               </div>
             </li>
@@ -137,37 +139,37 @@
                 <img
                   class="gallery__heart-icon"
                   src="./images/heart-icon.png"
-                  alt="Ícone de coação."
+                  alt="Ícone de coração."
                 />
               </div>
             </li>
           </ul>
         </section>
 
-        <section class="edit-profile">
-          <div class="edit-profile__content">
+        <section class="popup">
+          <div class="popup__container">
             <img
-              class="edit-profile__close-icon"
+              class="popup__close-icon"
               src="./images/close-icon.png"
               alt="Ícone de fechar."
             />
-            <h2 class="edit-profile__title">Editar perfil</h2>
-            <form class="edit-profile__form">
-              <div class="edit-profile__inputs">
+            <h2 class="popup__title">Editar perfil</h2>
+            <form class="popup__form">
+              <div class="popup__inputs">
                 <input
-                  class="edit-profile__input edit-profile__input_name"
+                  class="popup__input popup__input_name"
                   type="text"
                   placeholder="Nome"
+                  value="Jacques Cousteau"
                 />
                 <input
-                  class="edit-profile__input edit-profile__input_about"
+                  class="popup__input popup__input_about"
                   type="text"
                   placeholder="Sobre mim"
+                  value="Explorador"
                 />
               </div>
-              <button class="edit-profile__submit-button" type="submit">
-                Salvar
-              </button>
+              <button class="popup__submit-button" type="submit">Salvar</button>
             </form>
           </div>
         </section>
