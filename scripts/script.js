@@ -10,8 +10,6 @@ closeButton.addEventListener("click", openClosePopup);
 
 const nameInput = document.querySelector(".popup__input_name");
 const aboutInput = document.querySelector(".popup__input_about");
-let nameInputValue = nameInput.value;
-let aboutInputValue = aboutInput.value;
 
 const profileName = document.querySelector(".profile__name");
 const profileDescription = document.querySelector(".profile__description");
@@ -30,9 +28,3 @@ function handleProfileFormSubmit(evt) {
   openClosePopup();
 }
 formElement.addEventListener("submit", handleProfileFormSubmit);
-
-document.querySelector(".popup").addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    handleProfileFormSubmit();
-  }
-});
