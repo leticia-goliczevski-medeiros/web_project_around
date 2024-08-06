@@ -71,7 +71,8 @@ const initialCards = [
 
 const cardList = document.querySelector(".gallery__cards");
 
-initialCards.forEach((card) => {
+let HTMLlist = [];
+HTMLlist = initialCards.map((card) => {
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate
     .querySelector(".gallery__card")
@@ -83,6 +84,8 @@ initialCards.forEach((card) => {
   ).textContent = `${card.name}`;
 
   cardList.append(cardElement);
+
+  return card;
 });
 
 /* adicionar card */
@@ -102,11 +105,35 @@ function handleAddCardFormSubmit(event) {
     document.querySelector(".add-card-popup__input_title").value;
 
   cardList.prepend(cardElement);
+  HTMLlist.push({
+    name: document.querySelector(".add-card-popup__input_title").value,
+    link: document.querySelector(".add-card-popup__input_link").value,
+  });
 
   openCloseAddCardPopup();
 
   document.querySelector(".add-card-popup__input_link").value = "";
   document.querySelector(".add-card-popup__input_title").value = "";
+
+  likeOrDislike();
 }
 
 addCardformElement.addEventListener("submit", handleAddCardFormSubmit);
+
+/* like button */
+function likeOrDislike() {
+  const likeButton = document.querySelectorAll(".gallery__heart-icon");
+
+  Array.from(likeButton).forEach((item) => {
+    item.addEventListener("click", (event) => {
+      const eventTarget = event.target;
+      const source = eventTarget.getAttribute("src");
+      if (source === "./images/heart-icon.png") {
+        eventTarget.setAttribute("src", "./images/heart-icon-active.png");
+      }
+      if (source === "./images/heart-icon-active.png") {
+        eventTarget.setAttribute("src", "./images/heart-icon.png");
+      }
+    });
+  });
+}
