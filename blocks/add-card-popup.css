@@ -84,17 +84,16 @@
   font-family: "Inter", Arial, sans-serif;
   font-size: 18px;
   line-height: 1.21;
-  color: #c4c4c4;
+  color: #ffffff;
   width: 100%;
   padding: 14px 125px 18px;
-  background-color: #ffffff;
+  background-color: #000000;
   border-radius: 2px;
-  border: 1px solid #c4c4c4;
+  border: none;
 }
 .add-card-popup__submit-button:hover {
   cursor: pointer;
-  background-color: #000000;
-  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 @media screen and (max-width: 720px) {
