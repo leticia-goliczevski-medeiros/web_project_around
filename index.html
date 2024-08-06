@@ -51,98 +51,19 @@
 
         <section class="gallery">
           <ul class="gallery__cards">
-            <li class="gallery__card">
-              <img
-                class="gallery__card-image"
-                src="./images/vale-de-yosemite.jpg"
-                alt="Vista para um riacho ladeado de pinheiros com uma montanha e céu claro ao fundo."
-              />
-              <div class="gallery__card-info">
-                <h2 class="gallery__card-title">Vale de Yosemite</h2>
-                <img
-                  class="gallery__heart-icon"
-                  src="./images/heart-icon.png"
-                  alt="Ícone de coração."
-                />
-              </div>
-            </li>
-            <li class="gallery__card">
-              <img
-                class="gallery__card-image"
-                src="./images/lago-haiyaha.jpg"
-                alt="Vista para um lago azul com montanhas rochosas e céu claro ao fundo."
-              />
-              <div class="gallery__card-info">
-                <h2 class="gallery__card-title">Lago Haiyaha</h2>
-                <img
-                  class="gallery__heart-icon"
-                  src="./images/heart-icon.png"
-                  alt="Ícone de coração."
-                />
-              </div>
-            </li>
-            <li class="gallery__card">
-              <img
-                class="gallery__card-image"
-                src="./images/yellowstone-national-park.jpg"
-                alt="Fonte termal com árvores e céu azul ao fundo."
-              />
-              <div class="gallery__card-info">
-                <h2 class="gallery__card-title">Parque Nacional Yellowstone</h2>
-                <img
-                  class="gallery__heart-icon"
-                  src="./images/heart-icon.png"
-                  alt="Ícone de coração."
-                />
-              </div>
-            </li>
-            <li class="gallery__card">
-              <img
-                class="gallery__card-image"
-                src="./images/parque-nacional-rocky-mountain.jpg"
-                alt="Lago que espelha as árvores e montanhas que o rodeiam."
-              />
-              <div class="gallery__card-info">
-                <h2 class="gallery__card-title">
-                  Parque Nacional Rocky Mountain
-                </h2>
-                <img
-                  class="gallery__heart-icon"
-                  src="./images/heart-icon.png"
-                  alt="Ícone de coração."
-                />
-              </div>
-            </li>
-            <li class="gallery__card">
-              <img
-                class="gallery__card-image"
-                src="./images/grand-canyon.jpg"
-                alt="Vista para as formações rochosas do Grand Canyon com um céu claro ao fundo."
-              />
-              <div class="gallery__card-info">
-                <h2 class="gallery__card-title">Grand Canyon</h2>
-                <img
-                  class="gallery__heart-icon"
-                  src="./images/heart-icon.png"
-                  alt="Ícone de coração."
-                />
-              </div>
-            </li>
-            <li class="gallery__card">
-              <img
-                class="gallery__card-image"
-                src="./images/kauai-havai.jpg"
-                alt="Vista de cima da costa do Havaí, mostrando a praia e os morros verdes."
-              />
-              <div class="gallery__card-info">
-                <h2 class="gallery__card-title">Ilha Kauai</h2>
-                <img
-                  class="gallery__heart-icon"
-                  src="./images/heart-icon.png"
-                  alt="Ícone de coração."
-                />
-              </div>
-            </li>
+            <template id="card-template">
+              <li class="gallery__card">
+                <img class="gallery__card-image" src="Link" />
+                <div class="gallery__card-info">
+                  <h2 class="gallery__card-title">Título</h2>
+                  <img
+                    class="gallery__heart-icon"
+                    src="./images/heart-icon.png"
+                    alt="Ícone de coração."
+                  />
+                </div>
+              </li>
+            </template>
           </ul>
         </section>
 
