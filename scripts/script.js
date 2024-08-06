@@ -20,11 +20,8 @@ const formElement = document.querySelector(".popup__form");
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
 
-  let nameInputValue = nameInput.value;
-  let aboutInputValue = aboutInput.value;
-
-  profileName.textContent = nameInputValue;
-  profileDescription.textContent = aboutInputValue;
+  profileName.textContent = nameInput.value;
+  profileDescription.textContent = aboutInput.value;
   openClosePopup();
 }
 formElement.addEventListener("submit", handleProfileFormSubmit);
