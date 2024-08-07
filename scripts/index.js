@@ -79,6 +79,9 @@ HTMLlist = initialCards.map((card) => {
     .cloneNode(true);
 
   cardElement.querySelector(".gallery__card-image").src = `${card.link}`;
+  cardElement
+    .querySelector(".gallery__card-image")
+    .setAttribute("alt", `${card.name}`);
   cardElement.querySelector(
     ".gallery__card-title"
   ).textContent = `${card.name}`;
@@ -103,6 +106,13 @@ function handleAddCardFormSubmit(event) {
 
   cardElement.querySelector(".gallery__card-image").src =
     document.querySelector(".add-card-popup__input_link").value;
+
+  cardElement
+    .querySelector(".gallery__card-image")
+    .setAttribute(
+      "alt",
+      `${document.querySelector(".add-card-popup__input_title").value}`
+    );
 
   cardElement.querySelector(".gallery__card-title").textContent =
     document.querySelector(".add-card-popup__input_title").value;
