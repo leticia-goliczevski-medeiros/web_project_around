@@ -87,6 +87,8 @@ HTMLlist = initialCards.map((card) => {
 
   return card;
 });
+likeOrDislike();
+deleteCard();
 
 /* adicionar card */
 const addCardformElement = document.querySelector(".add-card-popup__form");
@@ -105,7 +107,8 @@ function handleAddCardFormSubmit(event) {
     document.querySelector(".add-card-popup__input_title").value;
 
   cardList.prepend(cardElement);
-  HTMLlist.push({
+
+  HTMLlist.unshift({
     name: document.querySelector(".add-card-popup__input_title").value,
     link: document.querySelector(".add-card-popup__input_link").value,
   });
@@ -116,6 +119,7 @@ function handleAddCardFormSubmit(event) {
   document.querySelector(".add-card-popup__input_title").value = "";
 
   likeOrDislike();
+  deleteCard();
 }
 
 addCardformElement.addEventListener("submit", handleAddCardFormSubmit);
@@ -134,6 +138,21 @@ function likeOrDislike() {
       if (source === "./images/heart-icon-active.png") {
         eventTarget.setAttribute("src", "./images/heart-icon.png");
       }
+    });
+  });
+}
+
+/* delete button */
+function deleteCard() {
+  const deleteCardButtons = document.querySelectorAll(".gallery__delete-icon");
+
+  Array.from(deleteCardButtons).forEach((deleteCardButton, index) => {
+    deleteCardButton.addEventListener("click", (event) => {
+      const eventTarget = event.target;
+      const card = eventTarget.closest(".gallery__card");
+      card.remove();
+
+      HTMLlist.splice(index, 1);
     });
   });
 }
