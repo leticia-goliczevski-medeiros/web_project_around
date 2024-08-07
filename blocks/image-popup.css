@@ -44,3 +44,10 @@
   bottom: -22px;
   left: 0;
 }
+
+@media screen and (max-width: 720px) {
+  .image-popup__close-icon {
+    width: 30px;
+    height: 30px;
+  }
+}

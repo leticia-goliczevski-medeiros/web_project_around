@@ -128,10 +128,10 @@ addCardformElement.addEventListener("submit", handleAddCardFormSubmit);
 
 /* like button */
 function likeOrDislike() {
-  const likeButton = document.querySelectorAll(".gallery__heart-icon");
+  const likeButtons = document.querySelectorAll(".gallery__heart-icon");
 
-  Array.from(likeButton).forEach((item) => {
-    item.addEventListener("click", (event) => {
+  Array.from(likeButtons).forEach((likeButton) => {
+    likeButton.addEventListener("click", (event) => {
       const eventTarget = event.target;
       const source = eventTarget.getAttribute("src");
       if (source === "./images/heart-icon.png") {
