@@ -89,6 +89,7 @@ HTMLlist = initialCards.map((card) => {
 });
 likeOrDislike();
 deleteCard();
+expandImage();
 
 /* adicionar card */
 const addCardformElement = document.querySelector(".add-card-popup__form");
@@ -120,6 +121,7 @@ function handleAddCardFormSubmit(event) {
 
   likeOrDislike();
   deleteCard();
+  expandImage();
 }
 
 addCardformElement.addEventListener("submit", handleAddCardFormSubmit);
@@ -153,6 +155,39 @@ function deleteCard() {
       card.remove();
 
       HTMLlist.splice(index, 1);
+    });
+  });
+}
+
+/* expand picture */
+function expandImage() {
+  const images = document.querySelectorAll(".gallery__card-image");
+
+  Array.from(images).forEach((image) => {
+    image.addEventListener("click", (event) => {
+      const eventTarget = event.target;
+
+      const imageSource = eventTarget.getAttribute("src");
+      const expandedImage = document.querySelector(".image-popup__image");
+      expandedImage.setAttribute("src", `${imageSource}`);
+
+      /* deixar a section image-popup visível, adicionando a classe */
+      document
+        .querySelector(".image-popup")
+        .classList.toggle("image-popup_opened");
+
+      /* close icon */
+      expandedImage.previousElementSibling.addEventListener("click", () => {
+        document
+          .querySelector(".image-popup")
+          .classList.remove("image-popup_opened");
+      });
+
+      /* selecionar o título h2 do card desse evenTarget (dessa imagem), pegar o conteúdo e colocar abaixo da imagem expandida */
+      const cardTitle =
+        eventTarget.closest(".gallery__card").lastElementChild.firstElementChild
+          .textContent;
+      document.querySelector(".image-popup__title").textContent = cardTitle;
     });
   });
 }

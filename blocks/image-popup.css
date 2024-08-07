@@ -1,0 +1,46 @@
+.image-popup {
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.image-popup_opened {
+  display: block;
+}
+.image-popup__container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.image-popup__close-icon {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: -40px;
+  right: -40px;
+}
+.image-popup__close-icon:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}
+.image-popup__image {
+  max-width: 75vw;
+  max-height: 75vh;
+}
+.image-popup__title {
+  font-family: "Inter", Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.21;
+  color: #ffffff;
+  margin: 0;
+  position: absolute;
+  bottom: -22px;
+  left: 0;
+}
