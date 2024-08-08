@@ -23,7 +23,7 @@
   object-fit: cover;
   border-radius: 10px 10px 0 0;
 }
-.gallery__card-image {
+.gallery__card-image:hover {
   cursor: pointer;
 }
 .gallery__delete-icon {
