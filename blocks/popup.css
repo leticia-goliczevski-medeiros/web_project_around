@@ -80,6 +80,10 @@
 .popup__input:focus {
   outline: none;
 }
+.popup__input_type_error {
+}
+.popup__input-error_active {
+}
 .popup__submit-button {
   font-family: "Inter", Arial, sans-serif;
   font-size: 18px;
