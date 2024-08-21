@@ -80,13 +80,15 @@
               alt="Ícone de fechar."
             />
             <h2 class="popup__title">Editar perfil</h2>
-            <form class="popup__form">
+            <form class="popup__form" novalidate>
               <div class="popup__inputs">
                 <input
                   class="popup__input popup__input_name"
                   type="text"
                   placeholder="Nome"
                   value="Jacques Cousteau"
+                  minlength="2"
+                  maxlength="40"
                   required
                 />
                 <input
@@ -94,6 +96,8 @@
                   type="text"
                   placeholder="Sobre mim"
                   value="Explorador"
+                  minlength="2"
+                  maxlength="200"
                   required
                 />
               </div>
@@ -116,11 +120,13 @@
                   class="add-card-popup__input add-card-popup__input_title"
                   type="text"
                   placeholder="Título"
+                  minlength="2"
+                  maxlength="30"
                   required
                 />
                 <input
                   class="add-card-popup__input add-card-popup__input_link"
-                  type="text"
+                  type="url"
                   placeholder="Link de imagem"
                   required
                 />
