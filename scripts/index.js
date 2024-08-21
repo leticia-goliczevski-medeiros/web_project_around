@@ -1,8 +1,8 @@
 /* Botões dos popups */
 const editProfileButton = document.querySelector(".profile__edit-icon");
-const editProfileSection = document.querySelector(".popup");
-const closeButton = document.querySelector(".popup__close-icon");
-const saveButton = document.querySelector(".popup__submit-button");
+const editProfileSection = document.querySelector(".edit-profile-popup");
+const closeButton = document.querySelector(".edit-profile-popup__close-icon");
+const saveButton = document.querySelector(".edit-profile-popup__submit-button");
 
 const addCardButton = document.querySelector(".profile__add-button");
 const addCardSection = document.querySelector(".add-card-popup");
@@ -26,21 +26,13 @@ makePopupButtonInteractive(
   editProfileSection,
   "popup_popup_opened"
 );
-makePopupButtonInteractive(
-  addCardButton,
-  addCardSection,
-  "add-card-popup_opened"
-);
+makePopupButtonInteractive(addCardButton, addCardSection, "popup_popup_opened");
 makePopupButtonInteractive(
   closeButtonElement,
   addCardSection,
-  "add-card-popup_opened"
+  "popup_popup_opened"
 );
-makePopupButtonInteractive(
-  createButton,
-  addCardSection,
-  "add-card-popup_opened"
-);
+makePopupButtonInteractive(createButton, addCardSection, "popup_popup_opened");
 
 function openClosePopup(section, sectionClass) {
   section.classList.toggle(`${sectionClass}`);
@@ -52,8 +44,8 @@ function makePopupButtonInteractive(button, section, sectionClass) {
 }
 
 /* A página já carrega com as informações do perfil */
-const nameInput = document.querySelector(".popup__input_name");
-const aboutInput = document.querySelector(".popup__input_about");
+const nameInput = document.querySelector(".edit-profile-popup__input_name");
+const aboutInput = document.querySelector(".edit-profile-popup__input_about");
 
 const profileName = document.querySelector(".profile__name");
 const profileDescription = document.querySelector(".profile__description");
@@ -61,7 +53,9 @@ profileName.textContent = nameInput.value;
 profileDescription.textContent = aboutInput.value;
 
 /* Implementar mudança dos dados no perfil */
-const editProfileFormElement = document.querySelector(".popup__form");
+const editProfileFormElement = document.querySelector(
+  ".edit-profile-popup__form"
+);
 editProfileFormElement.addEventListener("submit", submitProfileForm);
 
 function submitProfileForm(event) {

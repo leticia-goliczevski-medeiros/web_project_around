@@ -72,18 +72,18 @@
           </ul>
         </section>
 
-        <section class="popup">
+        <section class="popup edit-profile-popup">
           <div class="popup__container">
             <img
-              class="popup__close-icon"
+              class="popup__close-icon edit-profile-popup__close-icon"
               src="./images/close-icon.png"
               alt="Ícone de fechar."
             />
             <h2 class="popup__title">Editar perfil</h2>
-            <form class="popup__form" novalidate>
+            <form class="popup__form edit-profile-popup__form" novalidate>
               <div class="popup__inputs">
                 <input
-                  class="popup__input popup__input_name"
+                  class="popup__input edit-profile-popup__input_name"
                   type="text"
                   placeholder="Nome"
                   value="Jacques Cousteau"
@@ -93,7 +93,7 @@
                 />
                 <span class=""></span>
                 <input
-                  class="popup__input popup__input_about"
+                  class="popup__input edit-profile-popup__input_about"
                   type="text"
                   placeholder="Sobre mim"
                   value="Explorador"
@@ -103,23 +103,28 @@
                 />
                 <span class=""></span>
               </div>
-              <button class="popup__submit-button" type="submit">Salvar</button>
+              <button
+                class="popup__submit-button edit-profile-popup__submit-button"
+                type="submit"
+              >
+                Salvar
+              </button>
             </form>
           </div>
         </section>
 
-        <section class="add-card-popup">
-          <div class="add-card-popup__container">
+        <section class="popup add-card-popup">
+          <div class="popup__container">
             <img
-              class="add-card-popup__close-icon"
+              class="popup__close-icon add-card-popup__close-icon"
               src="./images/close-icon.png"
               alt="Ícone de fechar."
             />
-            <h2 class="add-card-popup__title">Novo local</h2>
+            <h2 class="popup__title">Novo local</h2>
             <form class="add-card-popup__form" novalidate>
-              <div class="add-card-popup__inputs">
+              <div class="popup__inputs">
                 <input
-                  class="add-card-popup__input add-card-popup__input_title"
+                  class="popup__input add-card-popup__input_title"
                   type="text"
                   placeholder="Título"
                   minlength="2"
@@ -128,14 +133,17 @@
                 />
                 <span class=""></span>
                 <input
-                  class="add-card-popup__input add-card-popup__input_link"
+                  class="popup__input add-card-popup__input_link"
                   type="url"
                   placeholder="Link de imagem"
                   required
                 />
                 <span class=""></span>
               </div>
-              <button class="add-card-popup__submit-button" type="submit">
+              <button
+                class="popup__submit-button add-card-popup__submit-button"
+                type="submit"
+              >
                 Criar
               </button>
             </form>
