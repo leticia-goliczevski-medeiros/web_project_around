@@ -11,32 +11,32 @@ const closeButtonElement = document.querySelector(
 );
 const createButton = document.querySelector(".add-card-popup__submit-button");
 
-makingPopupButtonInteractive(
+makePopupButtonInteractive(
   editProfileButton,
   editProfileSection,
   "popup_popup_opened"
 );
-makingPopupButtonInteractive(
+makePopupButtonInteractive(
   closeButton,
   editProfileSection,
   "popup_popup_opened"
 );
-makingPopupButtonInteractive(
+makePopupButtonInteractive(
   saveButton,
   editProfileSection,
   "popup_popup_opened"
 );
-makingPopupButtonInteractive(
+makePopupButtonInteractive(
   addCardButton,
   addCardSection,
   "add-card-popup_opened"
 );
-makingPopupButtonInteractive(
+makePopupButtonInteractive(
   closeButtonElement,
   addCardSection,
   "add-card-popup_opened"
 );
-makingPopupButtonInteractive(
+makePopupButtonInteractive(
   createButton,
   addCardSection,
   "add-card-popup_opened"
@@ -45,7 +45,7 @@ makingPopupButtonInteractive(
 function openClosePopup(section, sectionClass) {
   section.classList.toggle(`${sectionClass}`);
 }
-function makingPopupButtonInteractive(button, section, sectionClass) {
+function makePopupButtonInteractive(button, section, sectionClass) {
   button.addEventListener("click", () => {
     openClosePopup(section, sectionClass);
   });
