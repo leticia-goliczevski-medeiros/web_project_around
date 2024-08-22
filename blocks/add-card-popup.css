@@ -1,8 +1,0 @@
-.add-card-popup__submit-button {
-  color: #ffffff;
-  background-color: #000000;
-  border: none;
-}
-.add-card-popup__submit-button:hover {
-  background-color: rgba(0, 0, 0, 0.8);
-}

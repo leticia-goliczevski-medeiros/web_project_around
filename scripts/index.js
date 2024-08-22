@@ -11,35 +11,19 @@ const closeButtonElement = document.querySelector(
 );
 const createButton = document.querySelector(".add-card-popup__submit-button");
 
-makePopupButtonInteractive(
-  editProfileButton,
-  editProfileSection,
-  "popup_popup_opened"
-);
-makePopupButtonInteractive(
-  closeButton,
-  editProfileSection,
-  "popup_popup_opened"
-);
-makePopupButtonInteractive(
-  saveButton,
-  editProfileSection,
-  "popup_popup_opened"
-);
-makePopupButtonInteractive(addCardButton, addCardSection, "popup_popup_opened");
-makePopupButtonInteractive(
-  closeButtonElement,
-  addCardSection,
-  "popup_popup_opened"
-);
-makePopupButtonInteractive(createButton, addCardSection, "popup_popup_opened");
+makePopupButtonInteractive(editProfileButton, editProfileSection);
+makePopupButtonInteractive(closeButton, editProfileSection);
+makePopupButtonInteractive(saveButton, editProfileSection);
+makePopupButtonInteractive(addCardButton, addCardSection);
+makePopupButtonInteractive(closeButtonElement, addCardSection);
+makePopupButtonInteractive(createButton, addCardSection);
 
-function openClosePopup(section, sectionClass) {
-  section.classList.toggle(`${sectionClass}`);
+function openClosePopup(section) {
+  section.classList.toggle("popup_popup_opened");
 }
-function makePopupButtonInteractive(button, section, sectionClass) {
+function makePopupButtonInteractive(button, section) {
   button.addEventListener("click", () => {
-    openClosePopup(section, sectionClass);
+    openClosePopup(section);
   });
 }
 
