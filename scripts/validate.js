@@ -56,10 +56,6 @@ const enableValidation = () => {
   const formList = Array.from(document.forms);
 
   formList.forEach((formElement) => {
-    formElement.addEventListener("submit", (event) => {
-      event.preventDefault();
-    });
-
     validateInputs(formElement);
   });
 };
