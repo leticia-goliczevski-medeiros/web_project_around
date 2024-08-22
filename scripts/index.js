@@ -128,7 +128,7 @@ function submitAddCardForm(event) {
   inputTitle.value = "";
   inputLink.value = "";
 
-  /* fazndo o like button desse novo card interativo */
+  /* fazendo o like button desse novo card interativo */
   const likeButton = document.querySelector(".gallery__heart-icon");
   makeLikeButtonInteractive(likeButton);
 
@@ -185,11 +185,11 @@ function makeImageExpandable() {
 
       /* deixar a section image-popup visível, adicionando a classe */
       const imagePopupSection = document.querySelector(".image-popup");
-      imagePopupSection.classList.toggle("image-popup_opened");
+      imagePopupSection.classList.toggle("popup_popup_opened");
 
       /* close icon */
       expandedImage.previousElementSibling.addEventListener("click", () => {
-        imagePopupSection.classList.remove("image-popup_opened");
+        imagePopupSection.classList.remove("popup_popup_opened");
       });
 
       /* selecionar o título do card dessa imagem, pegar o conteúdo e colocar abaixo da imagem expandida */
