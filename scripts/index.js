@@ -1,21 +1,34 @@
 /* Botões dos popups */
 const editProfileButton = document.querySelector(".profile__edit-icon");
 const editProfileSection = document.querySelector(".edit-profile-popup");
-const closeButton = document.querySelector(".edit-profile-popup__close-icon");
+const editProfilePopupElement = document.querySelector(
+  ".edit-profile-popup__container"
+);
+const editProfileCloseButton = document.querySelector(
+  ".edit-profile-popup__close-icon"
+);
 const saveButton = document.querySelector(".edit-profile-popup__submit-button");
 
 const addCardButton = document.querySelector(".profile__add-button");
 const addCardSection = document.querySelector(".add-card-popup");
-const closeButtonElement = document.querySelector(
+const addCardPopupElement = document.querySelector(
+  ".add-card-popup__container"
+);
+const addCardCloseButton = document.querySelector(
   ".add-card-popup__close-icon"
 );
 const createButton = document.querySelector(".add-card-popup__submit-button");
 
 makePopupButtonInteractive(editProfileButton, editProfileSection);
-makePopupButtonInteractive(closeButton, editProfileSection);
-makePopupButtonInteractive(saveButton, editProfileSection);
+enableClosePopup(
+  editProfileSection,
+  editProfilePopupElement,
+  editProfileCloseButton
+);
+enableClosePopup(editProfileSection, editProfilePopupElement, saveButton);
+
 makePopupButtonInteractive(addCardButton, addCardSection);
-makePopupButtonInteractive(closeButtonElement, addCardSection);
+enableClosePopup(addCardSection, addCardPopupElement, addCardCloseButton);
 makePopupButtonInteractive(createButton, addCardSection);
 
 function openClosePopup(section) {
@@ -77,7 +90,7 @@ const initialCards = [
   },
 ];
 
-const cardList = document.querySelector(".gallery__cards");
+const galleryCards = document.querySelector(".gallery__cards");
 
 let HTMLlist = [];
 HTMLlist = initialCards.map((card) => {
@@ -92,7 +105,7 @@ HTMLlist = initialCards.map((card) => {
   cardImage.setAttribute("alt", `${card.name}`);
   cardTitle.textContent = `${card.name}`;
 
-  cardList.append(cardElement);
+  galleryCards.append(cardElement);
 
   return card;
 });
@@ -118,7 +131,7 @@ function submitAddCardForm(event) {
   cardImage.setAttribute("alt", `${inputTitle.value}`);
   cardTitle.textContent = inputTitle.value;
 
-  cardList.prepend(cardElement);
+  galleryCards.prepend(cardElement);
 
   HTMLlist.unshift({
     name: inputTitle.value,
@@ -128,58 +141,28 @@ function submitAddCardForm(event) {
   inputTitle.value = "";
   inputLink.value = "";
 
-  /* fazendo o like button desse novo card interativo */
-  const likeButton = document.querySelector(".gallery__heart-icon");
-  makeLikeButtonInteractive(likeButton);
-
-  makeDeleteCardButtonInteractive();
-  makeImageExpandable();
+  createButton.classList.add("popup__submit-button_inactive");
+  createButton.setAttribute("disabled", true);
 }
 
-/* like button */
-function makeLikeButtonInteractive(button) {
-  button.addEventListener("click", (event) => {
-    const eventTarget = event.target;
-    const source = eventTarget.getAttribute("src");
-    if (source === "./images/heart-icon.png") {
-      eventTarget.setAttribute("src", "./images/heart-icon-active.png");
-    } else {
-      eventTarget.setAttribute("src", "./images/heart-icon.png");
+/* enable close popup */
+function enableClosePopup(popupSection, popupElement, button) {
+  popupSection.addEventListener("click", (event) => {
+    if (!popupElement.contains(event.target) || event.target == button) {
+      popupSection.classList.remove("popup_popup_opened");
     }
   });
 }
-/* tornando os botões dos cards iniciais interativos */
-const likeButtons = document.querySelectorAll(".gallery__heart-icon");
-Array.from(likeButtons).forEach((likeButton) => {
-  makeLikeButtonInteractive(likeButton);
-});
-makeDeleteCardButtonInteractive();
-makeImageExpandable();
 
-/* delete button */
-function makeDeleteCardButtonInteractive() {
-  const deleteCardButtons = document.querySelectorAll(".gallery__delete-icon");
-
-  Array.from(deleteCardButtons).forEach((deleteCardButton, index) => {
-    deleteCardButton.addEventListener("click", (event) => {
-      const eventTarget = event.target;
-      const card = eventTarget.closest(".gallery__card");
-      card.remove();
-
-      HTMLlist.splice(index, 1);
-    });
-  });
-}
+makeCardsInteractive();
 
 /* expand picture */
-function makeImageExpandable() {
-  const images = document.querySelectorAll(".gallery__card-image");
+function makeCardsInteractive() {
+  const galleryCards = document.querySelector(".gallery__cards");
 
-  Array.from(images).forEach((image) => {
-    image.addEventListener("click", (event) => {
-      const eventTarget = event.target;
-
-      const imageSource = eventTarget.getAttribute("src");
+  galleryCards.addEventListener("click", (event) => {
+    if (event.target.classList.contains("gallery__card-image")) {
+      const imageSource = event.target.getAttribute("src");
       const expandedImage = document.querySelector(".image-popup__image");
       expandedImage.setAttribute("src", `${imageSource}`);
 
@@ -187,16 +170,31 @@ function makeImageExpandable() {
       const imagePopupSection = document.querySelector(".image-popup");
       imagePopupSection.classList.toggle("popup_popup_opened");
 
-      /* close icon */
-      expandedImage.previousElementSibling.addEventListener("click", () => {
-        imagePopupSection.classList.remove("popup_popup_opened");
-      });
+      // fechar image-popup
+      const imagePopupCloseButton = document.querySelector(
+        ".image-popup__close-icon"
+      );
+      enableClosePopup(imagePopupSection, expandedImage, imagePopupCloseButton);
 
       /* selecionar o título do card dessa imagem, pegar o conteúdo e colocar abaixo da imagem expandida */
       const cardTitle =
-        eventTarget.closest(".gallery__card").lastElementChild.firstElementChild
-          .textContent;
+        event.target.closest(".gallery__card").lastElementChild
+          .firstElementChild.textContent;
       document.querySelector(".image-popup__title").textContent = cardTitle;
-    });
+    }
+    if (event.target.classList.contains("gallery__delete-icon")) {
+      const card = event.target.closest(".gallery__card");
+      card.remove();
+
+      HTMLlist.splice(index, 1);
+    }
+    if (event.target.classList.contains("gallery__heart-icon")) {
+      const heartIconSource = event.target.getAttribute("src");
+      if (heartIconSource === "./images/heart-icon.png") {
+        eventTarget.setAttribute("src", "./images/heart-icon-active.png");
+      } else {
+        eventTarget.setAttribute("src", "./images/heart-icon.png");
+      }
+    }
   });
 }
