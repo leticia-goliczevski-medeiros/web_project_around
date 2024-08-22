@@ -116,6 +116,10 @@
   color: #c4c4c4;
   border: 1px solid #c4c4c4;
 }
+.popup__submit-button_inactive:hover {
+  cursor: unset;
+  background-color: #ffffff;
+}
 
 @media screen and (max-width: 720px) {
   .popup__container {
