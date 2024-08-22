@@ -1,3 +1,18 @@
+/* a função retorna true se houver algum input inválido */
+const hasInvalidInput = (inputList) => {
+  return inputList.some((inputElement) => {
+    return !inputElement.validity.valid;
+  });
+};
+
+const toogleButtonState = (inputList, buttonElement) => {
+  if (hasInvalidInput(inputList)) {
+    buttonElement.classList.add("popup__submit-button_inactive");
+  } else {
+    buttonElement.classList.remove("popup__submit-button_inactive");
+  }
+};
+
 const showInputError = (formElement, inputElement, errorMessage) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}_error`);
 
@@ -24,10 +39,13 @@ const isValid = (formElement, inputElement) => {
 
 const validateInputs = (formElement) => {
   const inputList = Array.from(formElement.querySelectorAll(".popup__input"));
+  const buttonElement = formElement.querySelector(".popup__submit-button");
+  toogleButtonState(inputList, buttonElement);
 
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", () => {
       isValid(formElement, inputElement);
+      toogleButtonState(inputList, buttonElement);
     });
   });
 };
