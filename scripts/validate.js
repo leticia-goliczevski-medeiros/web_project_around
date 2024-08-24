@@ -15,32 +15,27 @@ const toogleButtonState = (inputList, buttonElement, config) => {
   }
 };
 
-const showInputError = (formElement, inputElement, errorMessage, config) => {
-  const errorElement = formElement.querySelector(config.errorSelector);
+const showInputError = (inputElement, errorMessage, config) => {
+  const errorElement = inputElement.nextElementSibling;
 
   inputElement.classList.add(config.inputErrorClass);
   errorElement.classList.add(config.errorClass);
   errorElement.textContent = errorMessage;
 };
 
-const hideInputError = (formElement, inputElement, config) => {
-  const errorElement = formElement.querySelector(config.errorSelector);
+const hideInputError = (inputElement, config) => {
+  const errorElement = inputElement.nextElementSibling;
 
   inputElement.classList.remove(config.inputErrorClass);
   errorElement.classList.add(config.errorClass);
   errorElement.textContent = "";
 };
 
-const isValid = (formElement, inputElement, config) => {
+const isValid = (inputElement, config) => {
   if (!inputElement.validity.valid) {
-    showInputError(
-      formElement,
-      inputElement,
-      inputElement.validationMessage,
-      config
-    );
+    showInputError(inputElement, inputElement.validationMessage, config);
   } else {
-    hideInputError(formElement, inputElement, config);
+    hideInputError(inputElement, config);
   }
 };
 
@@ -53,7 +48,7 @@ const validateInputs = (formElement, config) => {
 
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", () => {
-      isValid(formElement, inputElement, config);
+      isValid(inputElement, config);
       toogleButtonState(inputList, buttonElement, config);
     });
   });
@@ -71,7 +66,6 @@ enableValidation({
   inputListSelector: ".popup__input",
   buttonElementSelector: ".popup__submit-button",
   buttonElementClass: "popup__submit-button_inactive",
-  errorSelector: `.${inputElement.id}_error`,
   errorClass: "popup__input-error_active",
   inputErrorClass: "popup__input_type_error",
 });
