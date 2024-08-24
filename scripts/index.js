@@ -1,3 +1,5 @@
+import * as validateModule from "./validate.js";
+
 /* Botões dos popups */
 const editProfileButton = document.querySelector(".profile__edit-icon");
 const editProfileSection = document.querySelector(".edit-profile-popup");
@@ -32,6 +34,7 @@ makePopupButtonInteractive(imagePopupCloseButton, imagePopupSection);
 function makePopupButtonInteractive(button, section) {
   button.addEventListener("click", () => {
     section.classList.toggle("popup_popup_opened");
+    validateModule.resetValidation();
   });
 }
 
@@ -40,11 +43,13 @@ function enableClosePopup(popupSection, popupElement) {
   popupSection.addEventListener("click", (event) => {
     if (!popupElement.contains(event.target)) {
       popupSection.classList.remove("popup_popup_opened");
+      validateModule.resetValidation();
     }
   });
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       popupSection.classList.remove("popup_popup_opened");
+      validateModule.resetValidation();
     }
   });
 }
@@ -72,7 +77,8 @@ function submitProfileForm(event) {
   profileName.textContent = nameInput.value;
   profileDescription.textContent = aboutInput.value;
 
-  editProfileSection.classList.toggle("popup_popup_opened");
+  validateModule.resetValidation();
+  editProfileSection.classList.remove("popup_popup_opened");
 }
 
 /* Cartões iniciais sendo adicionados via JS assim que a página carrega */
@@ -152,11 +158,12 @@ function submitAddCardForm(event) {
 
   addCardformElement.reset();
 
+  validateModule.resetValidation();
   /* depois que um card é adicionado, na próxima vez que o popup for aberto, o botão criar já estará desativado */
-  createButton.classList.add("popup__submit-button_inactive");
-  createButton.setAttribute("disabled", true);
+  // createButton.classList.add("popup__submit-button_inactive");
+  // createButton.setAttribute("disabled", true);
 
-  addCardSection.classList.toggle("popup_popup_opened");
+  addCardSection.classList.remove("popup_popup_opened");
 }
 
 makeCardsInteractive();

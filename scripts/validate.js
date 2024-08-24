@@ -1,11 +1,11 @@
 /* a função retorna true se houver algum input inválido */
-const hasInvalidInput = (inputList) => {
+export const hasInvalidInput = (inputList) => {
   return inputList.some((inputElement) => {
     return !inputElement.validity.valid;
   });
 };
 
-const toogleButtonState = (inputList, buttonElement, config) => {
+export const toggleButtonState = (inputList, buttonElement, config) => {
   if (hasInvalidInput(inputList)) {
     buttonElement.classList.add(config.buttonElementClass);
     buttonElement.setAttribute("disabled", true);
@@ -15,7 +15,7 @@ const toogleButtonState = (inputList, buttonElement, config) => {
   }
 };
 
-const showInputError = (inputElement, errorMessage, config) => {
+export const showInputError = (inputElement, errorMessage, config) => {
   const errorElement = inputElement.nextElementSibling;
 
   inputElement.classList.add(config.inputErrorClass);
@@ -23,7 +23,7 @@ const showInputError = (inputElement, errorMessage, config) => {
   errorElement.textContent = errorMessage;
 };
 
-const hideInputError = (inputElement, config) => {
+export const hideInputError = (inputElement, config) => {
   const errorElement = inputElement.nextElementSibling;
 
   inputElement.classList.remove(config.inputErrorClass);
@@ -31,7 +31,7 @@ const hideInputError = (inputElement, config) => {
   errorElement.textContent = "";
 };
 
-const isValid = (inputElement, config) => {
+export const isValid = (inputElement, config) => {
   if (!inputElement.validity.valid) {
     showInputError(inputElement, inputElement.validationMessage, config);
   } else {
@@ -39,22 +39,22 @@ const isValid = (inputElement, config) => {
   }
 };
 
-const validateInputs = (formElement, config) => {
+export const validateInputs = (formElement, config) => {
   const inputList = Array.from(
     formElement.querySelectorAll(config.inputListSelector)
   );
   const buttonElement = formElement.querySelector(config.buttonElementSelector);
-  toogleButtonState(inputList, buttonElement, config);
+  toggleButtonState(inputList, buttonElement, config);
 
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", () => {
       isValid(inputElement, config);
-      toogleButtonState(inputList, buttonElement, config);
+      toggleButtonState(inputList, buttonElement, config);
     });
   });
 };
 
-const enableValidation = (config) => {
+export const enableValidation = (config) => {
   const formList = Array.from(document.forms);
 
   formList.forEach((formElement) => {
@@ -69,3 +69,14 @@ enableValidation({
   errorClass: "popup__input-error_active",
   inputErrorClass: "popup__input_type_error",
 });
+
+export const resetValidation = () => {
+  enableValidation({
+    inputListSelector: ".popup__input",
+    buttonElementSelector: ".popup__submit-button",
+    buttonElementClass: "popup__submit-button_inactive",
+    errorClass: "popup__input-error_active",
+    inputErrorClass: "popup__input_type_error",
+  });
+  console.log("foi");
+};
