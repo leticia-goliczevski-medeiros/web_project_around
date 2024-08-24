@@ -34,7 +34,6 @@ makePopupButtonInteractive(imagePopupCloseButton, imagePopupSection);
 function makePopupButtonInteractive(button, section) {
   button.addEventListener("click", () => {
     section.classList.toggle("popup_popup_opened");
-    validateModule.resetValidation();
   });
 }
 
@@ -78,6 +77,7 @@ function submitProfileForm(event) {
   profileDescription.textContent = aboutInput.value;
 
   validateModule.resetValidation();
+
   editProfileSection.classList.remove("popup_popup_opened");
 }
 
@@ -157,11 +157,10 @@ function submitAddCardForm(event) {
   });
 
   addCardformElement.reset();
-
   validateModule.resetValidation();
   /* depois que um card é adicionado, na próxima vez que o popup for aberto, o botão criar já estará desativado */
-  // createButton.classList.add("popup__submit-button_inactive");
-  // createButton.setAttribute("disabled", true);
+  createButton.classList.add("popup__submit-button_inactive");
+  createButton.setAttribute("disabled", true);
 
   addCardSection.classList.remove("popup_popup_opened");
 }
@@ -191,7 +190,7 @@ function makeCardsInteractive() {
       card.remove();
 
       /* lista */
-      HTMLlist.splice(index, 1);
+      //HTMLlist.splice(index, 1);
     }
     if (event.target.classList.contains("gallery__heart-icon")) {
       const heartIconSource = event.target.getAttribute("src");

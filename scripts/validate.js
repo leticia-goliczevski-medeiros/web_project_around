@@ -27,7 +27,7 @@ export const hideInputError = (inputElement, config) => {
   const errorElement = inputElement.nextElementSibling;
 
   inputElement.classList.remove(config.inputErrorClass);
-  errorElement.classList.add(config.errorClass);
+  errorElement.classList.remove(config.errorClass);
   errorElement.textContent = "";
 };
 
@@ -71,12 +71,24 @@ enableValidation({
 });
 
 export const resetValidation = () => {
-  enableValidation({
+  const formList = Array.from(document.forms);
+  const config = {
     inputListSelector: ".popup__input",
     buttonElementSelector: ".popup__submit-button",
     buttonElementClass: "popup__submit-button_inactive",
     errorClass: "popup__input-error_active",
     inputErrorClass: "popup__input_type_error",
+  };
+
+  formList.forEach((formElement) => {
+    const inputList = Array.from(
+      formElement.querySelectorAll(config.inputListSelector)
+    );
+
+    formElement.reset();
+
+    inputList.forEach((inputElement) => {
+      hideInputError(inputElement, config);
+    });
   });
-  console.log("foi");
 };
