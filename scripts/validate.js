@@ -1,12 +1,12 @@
 /* a função retorna true se houver algum input inválido */
-export const hasInvalidInput = (inputList) => {
-  return inputList.some((inputElement) => {
+export const hasInvalidInput = (inputs) => {
+  return inputs.some((inputElement) => {
     return !inputElement.validity.valid;
   });
 };
 
-export const toggleButtonState = (inputList, buttonElement, config) => {
-  if (hasInvalidInput(inputList)) {
+export const toggleButtonState = (inputs, buttonElement, config) => {
+  if (hasInvalidInput(inputs)) {
     buttonElement.classList.add(config.buttonElementClass);
     buttonElement.setAttribute("disabled", true);
   } else {
@@ -40,16 +40,16 @@ export const isValid = (inputElement, config) => {
 };
 
 export const validateInputs = (formElement, config) => {
-  const inputList = Array.from(
-    formElement.querySelectorAll(config.inputListSelector)
+  const inputs = Array.from(
+    formElement.querySelectorAll(config.inputsSelector)
   );
   const buttonElement = formElement.querySelector(config.buttonElementSelector);
-  toggleButtonState(inputList, buttonElement, config);
+  toggleButtonState(inputs, buttonElement, config);
 
-  inputList.forEach((inputElement) => {
+  inputs.forEach((inputElement) => {
     inputElement.addEventListener("input", () => {
       isValid(inputElement, config);
-      toggleButtonState(inputList, buttonElement, config);
+      toggleButtonState(inputs, buttonElement, config);
     });
   });
 };
@@ -63,7 +63,7 @@ export const enableValidation = (config) => {
 };
 
 enableValidation({
-  inputListSelector: ".popup__input",
+  inputsSelector: ".popup__input",
   buttonElementSelector: ".popup__submit-button",
   buttonElementClass: "popup__submit-button_inactive",
   errorClass: "popup__input-error_active",
@@ -73,7 +73,7 @@ enableValidation({
 export const resetValidation = () => {
   const formList = Array.from(document.forms);
   const config = {
-    inputListSelector: ".popup__input",
+    inputsSelector: ".popup__input",
     buttonElementSelector: ".popup__submit-button",
     buttonElementClass: "popup__submit-button_inactive",
     errorClass: "popup__input-error_active",
@@ -81,13 +81,13 @@ export const resetValidation = () => {
   };
 
   formList.forEach((formElement) => {
-    const inputList = Array.from(
-      formElement.querySelectorAll(config.inputListSelector)
+    const inputs = Array.from(
+      formElement.querySelectorAll(config.inputsSelector)
     );
 
     formElement.reset();
 
-    inputList.forEach((inputElement) => {
+    inputs.forEach((inputElement) => {
       hideInputError(inputElement, config);
     });
   });

@@ -111,8 +111,8 @@ const initialCards = [
 
 const galleryCards = document.querySelector(".gallery__cards");
 
-let HTMLlist = [];
-HTMLlist = initialCards.map((card) => {
+let cardsArray = [];
+cardsArray = initialCards.map((card) => {
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate
     .querySelector(".gallery__card")
@@ -151,7 +151,7 @@ function submitAddCardForm(event) {
 
   galleryCards.prepend(cardElement);
 
-  HTMLlist.unshift({
+  cardsArray.unshift({
     name: inputTitle.value,
     link: inputLink.value,
   });
@@ -192,11 +192,11 @@ function makeCardsInteractive() {
       /* Remover o card da lista de cards do DOM */
       const cardTitle = card.lastElementChild.firstElementChild;
       const cardLink = card.firstElementChild.getAttribute("src");
-      const index = HTMLlist.indexOf({
+      const index = cardsArray.indexOf({
         name: cardTitle,
         link: cardLink,
       });
-      HTMLlist.splice(index, 1);
+      cardsArray.splice(index, 1);
     }
     if (event.target.classList.contains("gallery__heart-icon")) {
       const heartIconSource = event.target.getAttribute("src");
