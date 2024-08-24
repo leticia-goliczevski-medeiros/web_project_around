@@ -189,8 +189,14 @@ function makeCardsInteractive() {
       const card = event.target.closest(".gallery__card");
       card.remove();
 
-      /* lista */
-      //HTMLlist.splice(index, 1);
+      /* Remover o card da lista de cards do DOM */
+      const cardTitle = card.lastElementChild.firstElementChild;
+      const cardLink = card.firstElementChild.getAttribute("src");
+      const index = HTMLlist.indexOf({
+        name: cardTitle,
+        link: cardLink,
+      });
+      HTMLlist.splice(index, 1);
     }
     if (event.target.classList.contains("gallery__heart-icon")) {
       const heartIconSource = event.target.getAttribute("src");
