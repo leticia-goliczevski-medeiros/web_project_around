@@ -62,8 +62,11 @@ const aboutInput = document.querySelector(".edit-profile-popup__input_about");
 
 const profileName = document.querySelector(".profile__name");
 const profileDescription = document.querySelector(".profile__description");
-profileName.textContent = nameInput.value;
-profileDescription.textContent = aboutInput.value;
+function updateUserInfo() {
+  profileName.textContent = nameInput.value;
+  profileDescription.textContent = aboutInput.value;
+}
+updateUserInfo();
 
 /* Implementar mudança dos dados no perfil */
 const editProfileFormElement = document.querySelector(
@@ -73,10 +76,9 @@ editProfileFormElement.addEventListener("submit", submitProfileForm);
 function submitProfileForm(event) {
   event.preventDefault();
 
-  profileName.textContent = nameInput.value;
-  profileDescription.textContent = aboutInput.value;
+  updateUserInfo();
 
-  /* o formulário é resetado */
+  /* o valor dos inputs é atualizado depois do formulário ser resetado */
   validateModule.resetValidation();
   nameInput.value = profileName.textContent;
   aboutInput.value = profileDescription.textContent;
