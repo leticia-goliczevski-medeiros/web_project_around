@@ -76,7 +76,10 @@ function submitProfileForm(event) {
   profileName.textContent = nameInput.value;
   profileDescription.textContent = aboutInput.value;
 
+  /* o formulário é resetado */
   validateModule.resetValidation();
+  nameInput.value = profileName.textContent;
+  aboutInput.value = profileDescription.textContent;
 
   editProfileSection.classList.remove("popup_popup_opened");
 }
@@ -84,35 +87,34 @@ function submitProfileForm(event) {
 /* Cartões iniciais sendo adicionados via JS assim que a página carrega */
 const initialCards = [
   {
-    name: "Vale de Yosemite",
-    link: "./images/vale-de-yosemite.jpg",
-  },
-  {
-    name: "Lago Haiyaha",
-    link: "./images/lago-haiyaha.jpg",
-  },
-  {
-    name: "Parque Nacional Yellowstone",
-    link: "./images/yellowstone-national-park.jpg",
-  },
-  {
-    name: "Parque Nacional Rocky Mountain",
-    link: "./images/parque-nacional-rocky-mountain.jpg",
+    name: "Ilha Kauai",
+    link: "./images/kauai-havai.jpg",
   },
   {
     name: "Grand Canyon",
     link: "./images/grand-canyon.jpg",
   },
   {
-    name: "Ilha Kauai",
-    link: "./images/kauai-havai.jpg",
+    name: "Parque Nacional Rocky Mountain",
+    link: "./images/parque-nacional-rocky-mountain.jpg",
+  },
+  {
+    name: "Parque Nacional Yellowstone",
+    link: "./images/yellowstone-national-park.jpg",
+  },
+  {
+    name: "Lago Haiyaha",
+    link: "./images/lago-haiyaha.jpg",
+  },
+  {
+    name: "Vale de Yosemite",
+    link: "./images/vale-de-yosemite.jpg",
   },
 ];
 
 const galleryCards = document.querySelector(".gallery__cards");
-
-let cardsArray = [];
-cardsArray = initialCards.map((card) => {
+function renderCard(card) {
+  const galleryCards = document.querySelector(".gallery__cards");
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate
     .querySelector(".gallery__card")
@@ -124,9 +126,11 @@ cardsArray = initialCards.map((card) => {
   cardImage.setAttribute("alt", `${card.name}`);
   cardTitle.textContent = `${card.name}`;
 
-  galleryCards.append(cardElement);
+  galleryCards.prepend(cardElement);
+}
 
-  return card;
+initialCards.forEach((card) => {
+  renderCard(card);
 });
 
 /* adicionar novo card */
@@ -138,25 +142,13 @@ function submitAddCardForm(event) {
   const inputLink = document.querySelector(".add-card-popup__input_link");
   const inputTitle = document.querySelector(".add-card-popup__input_title");
 
-  const cardTemplate = document.querySelector("#card-template").content;
-  const cardElement = cardTemplate
-    .querySelector(".gallery__card")
-    .cloneNode(true);
-  const cardImage = cardElement.querySelector(".gallery__card-image");
-  const cardTitle = cardElement.querySelector(".gallery__card-title");
-
-  cardImage.src = inputLink.value;
-  cardImage.setAttribute("alt", `${inputTitle.value}`);
-  cardTitle.textContent = inputTitle.value;
-
-  galleryCards.prepend(cardElement);
-
-  cardsArray.unshift({
+  const card = {
     name: inputTitle.value,
     link: inputLink.value,
-  });
+  };
 
-  addCardformElement.reset();
+  renderCard(card);
+
   validateModule.resetValidation();
   /* depois que um card é adicionado, na próxima vez que o popup for aberto, o botão criar já estará desativado */
   createButton.classList.add("popup__submit-button_inactive");
@@ -165,46 +157,45 @@ function submitAddCardForm(event) {
   addCardSection.classList.remove("popup_popup_opened");
 }
 
+/* expand picture, delete button, like button */
 makeCardsInteractive();
 
-/* expand picture, delete button, like button */
+function enableExpandingImage(event) {
+  if (event.target.classList.contains("gallery__card-image")) {
+    const imageSource = event.target.getAttribute("src");
+    expandedImage.setAttribute("src", `${imageSource}`);
+
+    /* deixar a section image-popup visível */
+    imagePopupSection.classList.toggle("popup_popup_opened");
+
+    /* selecionar o título do card dessa imagem, pegar o conteúdo e colocar abaixo da imagem expandida */
+    const cardTitle =
+      event.target.closest(".gallery__card").lastElementChild.firstElementChild
+        .textContent;
+    document.querySelector(".image-popup__title").textContent = cardTitle;
+  }
+}
+function enableDeletingCards(event) {
+  if (event.target.classList.contains("gallery__delete-icon")) {
+    const card = event.target.closest(".gallery__card");
+    card.remove();
+  }
+}
+function enableLikeButton(event) {
+  if (event.target.classList.contains("gallery__heart-icon")) {
+    const heartIconSource = event.target.getAttribute("src");
+    if (heartIconSource === "./images/heart-icon.png") {
+      event.target.setAttribute("src", "./images/heart-icon-active.png");
+    } else {
+      event.target.setAttribute("src", "./images/heart-icon.png");
+    }
+  }
+}
+
 function makeCardsInteractive() {
-  const galleryCards = document.querySelector(".gallery__cards");
-
   galleryCards.addEventListener("click", (event) => {
-    if (event.target.classList.contains("gallery__card-image")) {
-      const imageSource = event.target.getAttribute("src");
-      expandedImage.setAttribute("src", `${imageSource}`);
-
-      /* deixar a section image-popup visível, adicionando a classe */
-      imagePopupSection.classList.toggle("popup_popup_opened");
-
-      /* selecionar o título do card dessa imagem, pegar o conteúdo e colocar abaixo da imagem expandida */
-      const cardTitle =
-        event.target.closest(".gallery__card").lastElementChild
-          .firstElementChild.textContent;
-      document.querySelector(".image-popup__title").textContent = cardTitle;
-    }
-    if (event.target.classList.contains("gallery__delete-icon")) {
-      const card = event.target.closest(".gallery__card");
-      card.remove();
-
-      /* Remover o card da lista de cards do DOM */
-      const cardTitle = card.lastElementChild.firstElementChild;
-      const cardLink = card.firstElementChild.getAttribute("src");
-      const index = cardsArray.indexOf({
-        name: cardTitle,
-        link: cardLink,
-      });
-      cardsArray.splice(index, 1);
-    }
-    if (event.target.classList.contains("gallery__heart-icon")) {
-      const heartIconSource = event.target.getAttribute("src");
-      if (heartIconSource === "./images/heart-icon.png") {
-        event.target.setAttribute("src", "./images/heart-icon-active.png");
-      } else {
-        event.target.setAttribute("src", "./images/heart-icon.png");
-      }
-    }
+    enableExpandingImage(event);
+    enableDeletingCards(event);
+    enableLikeButton(event);
   });
 }
