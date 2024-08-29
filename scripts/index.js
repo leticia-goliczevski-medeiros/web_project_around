@@ -9,8 +9,16 @@ const editProfilePopupElement = document.querySelector(
 const editProfileCloseButton = document.querySelector(
   ".edit-profile-popup__close-icon"
 );
-makePopupButtonInteractive(editProfileButton, editProfileSection);
-makePopupButtonInteractive(editProfileCloseButton, editProfileSection);
+makePopupButtonInteractive(
+  editProfileButton,
+  editProfileSection,
+  editProfilePopupElement
+);
+makePopupButtonInteractive(
+  editProfileCloseButton,
+  editProfileSection,
+  editProfilePopupElement
+);
 
 const addCardButton = document.querySelector(".profile__add-button");
 const addCardSection = document.querySelector(".add-card-popup");
@@ -21,40 +29,53 @@ const addCardCloseButton = document.querySelector(
   ".add-card-popup__close-icon"
 );
 const createButton = document.querySelector(".add-card-popup__submit-button");
-makePopupButtonInteractive(addCardButton, addCardSection);
-makePopupButtonInteractive(addCardCloseButton, addCardSection);
+makePopupButtonInteractive(addCardButton, addCardSection, addCardPopupElement);
+makePopupButtonInteractive(
+  addCardCloseButton,
+  addCardSection,
+  addCardPopupElement
+);
 
 const expandedImage = document.querySelector(".image-popup__image");
 const imagePopupSection = document.querySelector(".image-popup");
 const imagePopupCloseButton = document.querySelector(
   ".image-popup__close-icon"
 );
-makePopupButtonInteractive(imagePopupCloseButton, imagePopupSection);
+makePopupButtonInteractive(
+  imagePopupCloseButton,
+  imagePopupSection,
+  expandedImage
+);
 
-function makePopupButtonInteractive(button, section) {
+function makePopupButtonInteractive(button, popupSection, popupElement) {
   button.addEventListener("click", () => {
-    section.classList.toggle("popup_popup_opened");
+    if (!popupSection.classList.contains("popup_popup_opened")) {
+      popupSection.classList.add("popup_popup_opened");
+      enableClosePopup(popupSection, popupElement);
+    } else {
+      popupSection.classList.remove("popup_popup_opened");
+    }
   });
+}
+
+function closePopupWithClick(event, popupSection, popupElement) {
+  if (!popupElement.contains(event.target)) {
+    popupSection.classList.remove("popup_popup_opened");
+    validateModule.resetValidation();
+  }
+}
+function closePopupWithEsc(event, popupSection) {
+  if (event.key === "Escape") {
+    popupSection.classList.remove("popup_popup_opened");
+    validateModule.resetValidation();
+  }
 }
 
 /* clicar em esc ou fora do popup para fechá-lo */
 function enableClosePopup(popupSection, popupElement) {
-  popupSection.addEventListener("click", (event) => {
-    if (!popupElement.contains(event.target)) {
-      popupSection.classList.remove("popup_popup_opened");
-      validateModule.resetValidation();
-    }
-  });
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      popupSection.classList.remove("popup_popup_opened");
-      validateModule.resetValidation();
-    }
-  });
+  popupSection.addEventListener("click", closePopupWithClick);
+  document.addEventListener("keydown", closePopupWithEsc);
 }
-enableClosePopup(editProfileSection, editProfilePopupElement);
-enableClosePopup(addCardSection, addCardPopupElement);
-enableClosePopup(imagePopupSection, expandedImage);
 
 /* A página já carrega com as informações do perfil */
 const nameInput = document.querySelector(".edit-profile-popup__input_name");
