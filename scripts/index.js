@@ -14,7 +14,7 @@ const imagePopupSection = document.querySelector(".image-popup");
 function openPopup(event) {
   let closeButton;
   let popupSection;
-  const openPopupButton = event.target;
+  const openPopupButton = event.currentTarget;
   if (openPopupButton.classList.contains("profile__edit-icon")) {
     popupSection = editProfileSection;
     closeButton = editProfileSection.querySelector(".popup__close-icon");
@@ -36,12 +36,11 @@ function openPopup(event) {
 }
 
 function closePopup() {
-  const openedPopup = document.querySelector(".popup_popup_opened");
-  openedPopup.classList.remove("popup_popup_opened");
+  const popupSection = document.querySelector(".popup_popup_opened");
+  const closeButton = popupSection.querySelector(".popup__close-icon");
+  popupSection.classList.remove("popup_popup_opened");
 
   document.removeEventListener("keydown", closePopupWithEsc);
-
-  // Precisa remover os eventos do click no X e da Section
   popupSection.removeEventListener("click", closePopupWithClick);
   closeButton.removeEventListener("click", closePopup);
 
