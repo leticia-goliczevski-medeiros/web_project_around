@@ -3,79 +3,63 @@ import * as validateModule from "./validate.js";
 /* Botões dos popups */
 const editProfileButton = document.querySelector(".profile__edit-icon");
 const editProfileSection = document.querySelector(".edit-profile-popup");
-const editProfilePopupElement = document.querySelector(
-  ".edit-profile-popup__container"
-);
-const editProfileCloseButton = document.querySelector(
-  ".edit-profile-popup__close-icon"
-);
-makePopupButtonInteractive(
-  editProfileButton,
-  editProfileSection,
-  editProfilePopupElement
-);
-makePopupButtonInteractive(
-  editProfileCloseButton,
-  editProfileSection,
-  editProfilePopupElement
-);
 
 const addCardButton = document.querySelector(".profile__add-button");
 const addCardSection = document.querySelector(".add-card-popup");
-const addCardPopupElement = document.querySelector(
-  ".add-card-popup__container"
-);
-const addCardCloseButton = document.querySelector(
-  ".add-card-popup__close-icon"
-);
 const createButton = document.querySelector(".add-card-popup__submit-button");
-makePopupButtonInteractive(addCardButton, addCardSection, addCardPopupElement);
-makePopupButtonInteractive(
-  addCardCloseButton,
-  addCardSection,
-  addCardPopupElement
-);
 
 const expandedImage = document.querySelector(".image-popup__image");
 const imagePopupSection = document.querySelector(".image-popup");
-const imagePopupCloseButton = document.querySelector(
-  ".image-popup__close-icon"
-);
-makePopupButtonInteractive(
-  imagePopupCloseButton,
-  imagePopupSection,
-  expandedImage
-);
 
-function makePopupButtonInteractive(button, popupSection, popupElement) {
-  button.addEventListener("click", () => {
-    if (!popupSection.classList.contains("popup_popup_opened")) {
-      popupSection.classList.add("popup_popup_opened");
-      enableClosePopup(popupSection, popupElement);
-    } else {
-      popupSection.classList.remove("popup_popup_opened");
-    }
-  });
-}
-
-function closePopupWithClick(event, popupSection, popupElement) {
-  if (!popupElement.contains(event.target)) {
-    popupSection.classList.remove("popup_popup_opened");
-    validateModule.resetValidation();
+function openPopup(event) {
+  let closeButton;
+  let popupSection;
+  const openPopupButton = event.target;
+  if (openPopupButton.classList.contains("profile__edit-icon")) {
+    popupSection = editProfileSection;
+    closeButton = editProfileSection.querySelector(".popup__close-icon");
   }
-}
-function closePopupWithEsc(event, popupSection) {
-  if (event.key === "Escape") {
-    popupSection.classList.remove("popup_popup_opened");
-    validateModule.resetValidation();
+  if (openPopupButton.classList.contains("profile__add-button")) {
+    popupSection = addCardSection;
+    closeButton = addCardSection.querySelector(".popup__close-icon");
   }
-}
+  if (openPopupButton.classList.contains("gallery__card-image")) {
+    popupSection = imagePopupSection;
+    closeButton = imagePopupSection.querySelector(".popup__close-icon");
+  }
 
-/* clicar em esc ou fora do popup para fechá-lo */
-function enableClosePopup(popupSection, popupElement) {
-  popupSection.addEventListener("click", closePopupWithClick);
+  popupSection.classList.add("popup_popup_opened");
+
   document.addEventListener("keydown", closePopupWithEsc);
+  popupSection.addEventListener("click", closePopupWithClick);
+  closeButton.addEventListener("click", closePopup);
 }
+
+function closePopup() {
+  const openedPopup = document.querySelector(".popup_popup_opened");
+  openedPopup.classList.remove("popup_popup_opened");
+
+  document.removeEventListener("keydown", closePopupWithEsc);
+
+  // Precisa remover os eventos do click no X e da Section
+  popupSection.removeEventListener("click", closePopupWithClick);
+  closeButton.removeEventListener("click", closePopup);
+
+  validateModule.resetValidation();
+}
+function closePopupWithEsc(event) {
+  if (event.key === "Escape") {
+    closePopup();
+  }
+}
+function closePopupWithClick(event) {
+  if (event.target.tagName == "SECTION") {
+    closePopup();
+  }
+}
+
+editProfileButton.addEventListener("click", openPopup);
+addCardButton.addEventListener("click", openPopup);
 
 /* A página já carrega com as informações do perfil */
 const nameInput = document.querySelector(".edit-profile-popup__input_name");
@@ -100,11 +84,9 @@ function submitProfileForm(event) {
   updateUserInfo();
 
   /* o valor dos inputs é atualizado depois do formulário ser resetado */
-  validateModule.resetValidation();
+  closePopup();
   nameInput.value = profileName.textContent;
   aboutInput.value = profileDescription.textContent;
-
-  editProfileSection.classList.remove("popup_popup_opened");
 }
 
 /* Cartões iniciais sendo adicionados via JS assim que a página carrega */
@@ -135,7 +117,6 @@ const initialCards = [
   },
 ];
 
-const galleryCards = document.querySelector(".gallery__cards");
 function renderCard(card) {
   const galleryCards = document.querySelector(".gallery__cards");
   const cardTemplate = document.querySelector("#card-template").content;
@@ -145,9 +126,16 @@ function renderCard(card) {
   const cardImage = cardElement.querySelector(".gallery__card-image");
   const cardTitle = cardElement.querySelector(".gallery__card-title");
 
+  const likeButton = cardElement.querySelector(".gallery__heart-icon");
+  const deleteButton = cardElement.querySelector(".gallery__delete-icon");
+
   cardImage.src = `${card.link}`;
   cardImage.setAttribute("alt", `${card.name}`);
   cardTitle.textContent = `${card.name}`;
+
+  cardImage.addEventListener("click", enableExpandingImage);
+  likeButton.addEventListener("click", enableLikeButton);
+  deleteButton.addEventListener("click", enableDeletingCards);
 
   galleryCards.prepend(cardElement);
 }
@@ -177,48 +165,30 @@ function submitAddCardForm(event) {
   createButton.classList.add("popup__submit-button_inactive");
   createButton.setAttribute("disabled", true);
 
-  addCardSection.classList.remove("popup_popup_opened");
+  closePopup();
 }
-
-/* expand picture, delete button, like button */
-makeCardsInteractive();
 
 function enableExpandingImage(event) {
-  if (event.target.classList.contains("gallery__card-image")) {
-    const imageSource = event.target.getAttribute("src");
-    expandedImage.setAttribute("src", `${imageSource}`);
+  openPopup(event);
 
-    /* deixar a section image-popup visível */
-    imagePopupSection.classList.toggle("popup_popup_opened");
+  const imageSource = event.target.getAttribute("src");
+  expandedImage.setAttribute("src", `${imageSource}`);
 
-    /* selecionar o título do card dessa imagem, pegar o conteúdo e colocar abaixo da imagem expandida */
-    const cardTitle =
-      event.target.closest(".gallery__card").lastElementChild.firstElementChild
-        .textContent;
-    document.querySelector(".image-popup__title").textContent = cardTitle;
-  }
+  /* selecionar o título do card dessa imagem, pegar o conteúdo e colocar abaixo da imagem expandida */
+  const cardTitle =
+    event.target.closest(".gallery__card").lastElementChild.firstElementChild
+      .textContent;
+  document.querySelector(".image-popup__title").textContent = cardTitle;
 }
 function enableDeletingCards(event) {
-  if (event.target.classList.contains("gallery__delete-icon")) {
-    const card = event.target.closest(".gallery__card");
-    card.remove();
-  }
+  const card = event.target.closest(".gallery__card");
+  card.remove();
 }
 function enableLikeButton(event) {
-  if (event.target.classList.contains("gallery__heart-icon")) {
-    const heartIconSource = event.target.getAttribute("src");
-    if (heartIconSource === "./images/heart-icon.png") {
-      event.target.setAttribute("src", "./images/heart-icon-active.png");
-    } else {
-      event.target.setAttribute("src", "./images/heart-icon.png");
-    }
+  const heartIconSource = event.target.getAttribute("src");
+  if (heartIconSource === "./images/heart-icon.png") {
+    event.target.setAttribute("src", "./images/heart-icon-active.png");
+  } else {
+    event.target.setAttribute("src", "./images/heart-icon.png");
   }
-}
-
-function makeCardsInteractive() {
-  galleryCards.addEventListener("click", (event) => {
-    enableExpandingImage(event);
-    enableDeletingCards(event);
-    enableLikeButton(event);
-  });
 }
