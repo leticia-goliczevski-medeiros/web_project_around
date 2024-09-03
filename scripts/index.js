@@ -116,31 +116,68 @@ const initialCards = [
   },
 ];
 
-function renderCard(card) {
-  const galleryCards = document.querySelector(".gallery__cards");
-  const cardTemplate = document.querySelector("#card-template").content;
-  const cardElement = cardTemplate
-    .querySelector(".gallery__card")
-    .cloneNode(true);
-  const cardImage = cardElement.querySelector(".gallery__card-image");
-  const cardTitle = cardElement.querySelector(".gallery__card-title");
+class Card {
+  constructor(data) {
+    this._name = data.item.name;
+    this._link = data.item.link;
+    this._templateSelector = data.templateSelector;
+    this._enableExpandingImage = data.enableExpandingImage;
+    this._enableDeletingCards = data.enableDeletingCards;
+    this._enableLikeButton = data.enableLikeButton;
+  }
+  _getTemplate() {
+    const cardElement = document
+      .querySelector(this._templateSelector)
+      .content.cloneNode(true);
 
-  const likeButton = cardElement.querySelector(".gallery__heart-icon");
-  const deleteButton = cardElement.querySelector(".gallery__delete-icon");
+    return cardElement;
+  }
+  generateCard() {
+    this._element = this._getTemplate();
+    this._setEventListeners();
 
-  cardImage.src = `${card.link}`;
-  cardImage.setAttribute("alt", `${card.name}`);
-  cardTitle.textContent = `${card.name}`;
+    this._element.querySelector(".gallery__card-title").textContent =
+      this._name;
+    this._element
+      .querySelector(".gallery__card-title")
+      .setAttribute("alt", this._name);
+    this._element.querySelector(".gallery__card-image").src = this._link;
 
-  cardImage.addEventListener("click", enableExpandingImage);
-  likeButton.addEventListener("click", enableLikeButton);
-  deleteButton.addEventListener("click", enableDeletingCards);
+    return this._element;
+  }
+  _setEventListeners() {
+    this._element
+      .querySelector(".gallery__card-image")
+      .addEventListener("click", (event) => {
+        this._enableExpandingImage(event);
+      });
 
-  galleryCards.prepend(cardElement);
+    this._element
+      .querySelector(".gallery__delete-icon")
+      .addEventListener("click", (event) => {
+        this._enableDeletingCards(event);
+      });
+
+    this._element
+      .querySelector(".gallery__heart-icon")
+      .addEventListener("click", (event) => {
+        this._enableLikeButton(event);
+      });
+  }
 }
 
-initialCards.forEach((card) => {
-  renderCard(card);
+const galleryCards = document.querySelector(".gallery__cards");
+initialCards.forEach((item) => {
+  const card = new Card({
+    item,
+    templateSelector: "#card-template",
+    enableExpandingImage,
+    enableDeletingCards,
+    enableLikeButton,
+  });
+  const cardElement = card.generateCard();
+
+  galleryCards.prepend(cardElement);
 });
 
 /* adicionar novo card */
@@ -152,12 +189,21 @@ function submitAddCardForm(event) {
   const inputLink = document.querySelector(".add-card-popup__input_link");
   const inputTitle = document.querySelector(".add-card-popup__input_title");
 
-  const card = {
+  const item = {
     name: inputTitle.value,
     link: inputLink.value,
   };
 
-  renderCard(card);
+  const card = new Card({
+    item,
+    templateSelector: "#card-template",
+    enableExpandingImage,
+    enableDeletingCards,
+    enableLikeButton,
+  });
+  const cardElement = card.generateCard();
+
+  galleryCards.prepend(cardElement);
 
   validateModule.resetValidation();
   /* depois que um card é adicionado, na próxima vez que o popup for aberto, o botão criar já estará desativado */
