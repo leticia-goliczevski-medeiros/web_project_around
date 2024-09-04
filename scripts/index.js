@@ -8,13 +8,13 @@ const addCardButton = document.querySelector(".profile__add-button");
 const addCardSection = document.querySelector(".add-card-popup");
 const createButton = document.querySelector(".add-card-popup__submit-button");
 
-const expandedImage = document.querySelector(".image-popup__image");
+//const expandedImage = document.querySelector(".image-popup__image");
 const imagePopupSection = document.querySelector(".image-popup");
 
 function openPopup(event) {
   let closeButton;
   let popupSection;
-  const openPopupButton = event.currentTarget;
+  const openPopupButton = event.target;
   if (openPopupButton.classList.contains("profile__edit-icon")) {
     popupSection = editProfileSection;
     closeButton = editProfileSection.querySelector(".popup__close-icon");
@@ -121,20 +121,20 @@ class Card {
     this._name = data.item.name;
     this._link = data.item.link;
     this._templateSelector = data.templateSelector;
-    this._enableExpandingImage = data.enableExpandingImage;
-    this._enableDeletingCards = data.enableDeletingCards;
-    this._enableLikeButton = data.enableLikeButton;
+    this._openPopup = data.openPopup;
   }
   _getTemplate() {
-    const cardElement = document
-      .querySelector(this._templateSelector)
-      .content.cloneNode(true);
+    const templateElement = document.querySelector(
+      this._templateSelector
+    ).content;
+    const cardElement = templateElement
+      .querySelector(".gallery__card")
+      .cloneNode(true);
 
     return cardElement;
   }
   generateCard() {
     this._element = this._getTemplate();
-    this._setEventListeners();
 
     this._element.querySelector(".gallery__card-title").textContent =
       this._name;
@@ -143,26 +143,47 @@ class Card {
       .setAttribute("alt", this._name);
     this._element.querySelector(".gallery__card-image").src = this._link;
 
+    this._setEventListeners();
+
     return this._element;
   }
   _setEventListeners() {
-    this._element
-      .querySelector(".gallery__card-image")
-      .addEventListener("click", (event) => {
-        this._enableExpandingImage(event);
-      });
+    const cardImage = this._element.querySelector(".gallery__card-image");
+
+    cardImage.addEventListener("click", (event) => {
+      this._openPopup(event);
+      this._enableExpandingImage();
+    });
 
     this._element
       .querySelector(".gallery__delete-icon")
-      .addEventListener("click", (event) => {
-        this._enableDeletingCards(event);
+      .addEventListener("click", () => {
+        this._enableDeletingCards();
       });
 
     this._element
       .querySelector(".gallery__heart-icon")
-      .addEventListener("click", (event) => {
-        this._enableLikeButton(event);
+      .addEventListener("click", () => {
+        this._enableLikeButton();
       });
+  }
+  _enableExpandingImage() {
+    const expandedImage = document.querySelector(".image-popup__image");
+    expandedImage.setAttribute("src", `${this._link}`);
+
+    document.querySelector(".image-popup__title").textContent = this._name;
+  }
+  _enableDeletingCards() {
+    this._element.remove();
+  }
+  _enableLikeButton() {
+    const likeButon = this._element.querySelector(".gallery__heart-icon");
+    const heartIconSource = likeButon.getAttribute("src");
+    if (heartIconSource === "./images/heart-icon.png") {
+      likeButon.setAttribute("src", "./images/heart-icon-active.png");
+    } else {
+      likeButon.setAttribute("src", "./images/heart-icon.png");
+    }
   }
 }
 
@@ -171,9 +192,7 @@ initialCards.forEach((item) => {
   const card = new Card({
     item,
     templateSelector: "#card-template",
-    enableExpandingImage,
-    enableDeletingCards,
-    enableLikeButton,
+    openPopup,
   });
   const cardElement = card.generateCard();
 
@@ -197,15 +216,12 @@ function submitAddCardForm(event) {
   const card = new Card({
     item,
     templateSelector: "#card-template",
-    enableExpandingImage,
-    enableDeletingCards,
-    enableLikeButton,
+    openPopup,
   });
   const cardElement = card.generateCard();
 
   galleryCards.prepend(cardElement);
 
-  validateModule.resetValidation();
   /* depois que um card é adicionado, na próxima vez que o popup for aberto, o botão criar já estará desativado */
   createButton.classList.add("popup__submit-button_inactive");
   createButton.setAttribute("disabled", true);
@@ -213,27 +229,27 @@ function submitAddCardForm(event) {
   closePopup();
 }
 
-function enableExpandingImage(event) {
-  openPopup(event);
+//function enableExpandingImage(event) {
+//openPopup(event);
 
-  const imageSource = event.target.getAttribute("src");
-  expandedImage.setAttribute("src", `${imageSource}`);
+// const imageSource = event.target.getAttribute("src");
+// expandedImage.setAttribute("src", `${imageSource}`);
 
-  /* selecionar o título do card dessa imagem, pegar o conteúdo e colocar abaixo da imagem expandida */
-  const cardTitle =
-    event.target.closest(".gallery__card").lastElementChild.firstElementChild
-      .textContent;
-  document.querySelector(".image-popup__title").textContent = cardTitle;
-}
-function enableDeletingCards(event) {
-  const card = event.target.closest(".gallery__card");
-  card.remove();
-}
-function enableLikeButton(event) {
-  const heartIconSource = event.target.getAttribute("src");
-  if (heartIconSource === "./images/heart-icon.png") {
-    event.target.setAttribute("src", "./images/heart-icon-active.png");
-  } else {
-    event.target.setAttribute("src", "./images/heart-icon.png");
-  }
-}
+// /* selecionar o título do card dessa imagem, pegar o conteúdo e colocar abaixo da imagem expandida */
+// const cardTitle =
+//   event.target.closest(".gallery__card").lastElementChild.firstElementChild
+//     .textContent;
+// document.querySelector(".image-popup__title").textContent = cardTitle;
+// }
+// function enableDeletingCards(event) {
+//   const card = event.target.closest(".gallery__card");
+//   card.remove();
+// }
+// function enableLikeButton(event) {
+//   const heartIconSource = event.target.getAttribute("src");
+//   if (heartIconSource === "./images/heart-icon.png") {
+//     event.target.setAttribute("src", "./images/heart-icon-active.png");
+//   } else {
+//     event.target.setAttribute("src", "./images/heart-icon.png");
+//   }
+// }
