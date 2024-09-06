@@ -1,4 +1,5 @@
-import * as validateModule from "./validate.js";
+import { FormValidator, resetValidation } from "./FormValidator.js";
+import Card from "./Card.js";
 
 /* Botões dos popups */
 const editProfileButton = document.querySelector(".profile__edit-icon");
@@ -8,7 +9,6 @@ const addCardButton = document.querySelector(".profile__add-button");
 const addCardSection = document.querySelector(".add-card-popup");
 const createButton = document.querySelector(".add-card-popup__submit-button");
 
-//const expandedImage = document.querySelector(".image-popup__image");
 const imagePopupSection = document.querySelector(".image-popup");
 
 function openPopup(event) {
@@ -44,7 +44,7 @@ function closePopup() {
   popupSection.removeEventListener("click", closePopupWithClick);
   closeButton.removeEventListener("click", closePopup);
 
-  validateModule.resetValidation();
+  resetValidation();
 }
 function closePopupWithEsc(event) {
   if (event.key === "Escape") {
@@ -116,77 +116,6 @@ const initialCards = [
   },
 ];
 
-class Card {
-  constructor(data) {
-    this._name = data.item.name;
-    this._link = data.item.link;
-    this._templateSelector = data.templateSelector;
-    this._openPopup = data.openPopup;
-  }
-  _getTemplate() {
-    const templateElement = document.querySelector(
-      this._templateSelector
-    ).content;
-    const cardElement = templateElement
-      .querySelector(".gallery__card")
-      .cloneNode(true);
-
-    return cardElement;
-  }
-  generateCard() {
-    this._element = this._getTemplate();
-
-    this._element.querySelector(".gallery__card-title").textContent =
-      this._name;
-    this._element
-      .querySelector(".gallery__card-title")
-      .setAttribute("alt", this._name);
-    this._element.querySelector(".gallery__card-image").src = this._link;
-
-    this._setEventListeners();
-
-    return this._element;
-  }
-  _setEventListeners() {
-    const cardImage = this._element.querySelector(".gallery__card-image");
-
-    cardImage.addEventListener("click", (event) => {
-      this._openPopup(event);
-      this._enableExpandingImage();
-    });
-
-    this._element
-      .querySelector(".gallery__delete-icon")
-      .addEventListener("click", () => {
-        this._enableDeletingCards();
-      });
-
-    this._element
-      .querySelector(".gallery__heart-icon")
-      .addEventListener("click", () => {
-        this._enableLikeButton();
-      });
-  }
-  _enableExpandingImage() {
-    const expandedImage = document.querySelector(".image-popup__image");
-    expandedImage.setAttribute("src", `${this._link}`);
-
-    document.querySelector(".image-popup__title").textContent = this._name;
-  }
-  _enableDeletingCards() {
-    this._element.remove();
-  }
-  _enableLikeButton() {
-    const likeButon = this._element.querySelector(".gallery__heart-icon");
-    const heartIconSource = likeButon.getAttribute("src");
-    if (heartIconSource === "./images/heart-icon.png") {
-      likeButon.setAttribute("src", "./images/heart-icon-active.png");
-    } else {
-      likeButon.setAttribute("src", "./images/heart-icon.png");
-    }
-  }
-}
-
 const galleryCards = document.querySelector(".gallery__cards");
 initialCards.forEach((item) => {
   const card = new Card({
@@ -228,3 +157,18 @@ function submitAddCardForm(event) {
 
   closePopup();
 }
+
+/* Aplicar validação dos formulários */
+const config = {
+  inputsSelector: ".popup__input",
+  buttonElementSelector: ".popup__submit-button",
+  buttonElementClass: "popup__submit-button_inactive",
+  errorClass: "popup__input-error_active",
+  inputErrorClass: "popup__input_type_error",
+};
+const formList = Array.from(document.forms);
+
+formList.forEach((formElement) => {
+  const validation = new FormValidator(config, formElement);
+  validation.enableValidation(config, formElement);
+});
