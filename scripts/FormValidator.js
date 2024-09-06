@@ -66,6 +66,14 @@ export class FormValidator {
 }
 
 /* tarefa extra do sprint 9: resetar formulário quando o popup é fechado  */
+export const config = {
+  inputsSelector: ".popup__input",
+  buttonElementSelector: ".popup__submit-button",
+  buttonElementClass: "popup__submit-button_inactive",
+  errorClass: "popup__input-error_active",
+  inputErrorClass: "popup__input_type_error",
+};
+
 export const resetValidation = () => {
   const formList = Array.from(document.forms);
 
