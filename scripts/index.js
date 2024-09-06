@@ -228,28 +228,3 @@ function submitAddCardForm(event) {
 
   closePopup();
 }
-
-//function enableExpandingImage(event) {
-//openPopup(event);
-
-// const imageSource = event.target.getAttribute("src");
-// expandedImage.setAttribute("src", `${imageSource}`);
-
-// /* selecionar o título do card dessa imagem, pegar o conteúdo e colocar abaixo da imagem expandida */
-// const cardTitle =
-//   event.target.closest(".gallery__card").lastElementChild.firstElementChild
-//     .textContent;
-// document.querySelector(".image-popup__title").textContent = cardTitle;
-// }
-// function enableDeletingCards(event) {
-//   const card = event.target.closest(".gallery__card");
-//   card.remove();
-// }
-// function enableLikeButton(event) {
-//   const heartIconSource = event.target.getAttribute("src");
-//   if (heartIconSource === "./images/heart-icon.png") {
-//     event.target.setAttribute("src", "./images/heart-icon-active.png");
-//   } else {
-//     event.target.setAttribute("src", "./images/heart-icon.png");
-//   }
-// }
