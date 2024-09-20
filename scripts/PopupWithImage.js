@@ -7,6 +7,6 @@ class PopupWithImage extends Popup {
   open() {
     super.open();
 
-    this._popupImage.src = ; //como selecionar o link da imagem que acionou o evento de click?
+    this._popupImage.src = ; //como selecionar o link da imagem que acionou o evento de click? this.link e this.name da classe Card. renderer?
   }
 }
