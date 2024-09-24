@@ -1,12 +1,15 @@
-class PopupWithImage extends Popup {
+import Popup from "./Popup.js";
+
+export default class PopupWithImage extends Popup {
   constructor(popupSelector) {
     super(popupSelector);
-    this._popupImage = super._popup.querySelector(".image-popup__image");
+    this._popupImage = this._popup.querySelector(".image-popup__image");
+    this._popupTitle = this._popup.querySelector(".image-popup__title");
   }
 
-  open() {
+  open(item) {
+    this._popupImage.src = item.link;
+    this._popupTitle.textContent = item.name;
     super.open();
-
-    this._popupImage.src = ; //como selecionar o link da imagem que acionou o evento de click? this.link e this.name da classe Card. renderer?
   }
 }

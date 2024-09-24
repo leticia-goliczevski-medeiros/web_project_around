@@ -1,16 +1,23 @@
-class UserInfo {
-  constructor({ name, job }) {
-    this._userName = name;
-    this._userDescription = job;
+export default class UserInfo {
+  constructor({ profileNameSelector, profileDescriptionSelector }) {
+    this._profileName = document.querySelector(profileNameSelector);
+    this._profileDescription = document.querySelector(
+      profileDescriptionSelector
+    );
+    this._nameInput = document.querySelector(".edit-profile-popup__input_name");
+    this._aboutInput = document.querySelector(
+      ".edit-profile-popup__input_about"
+    );
   }
   getUserInfo() {
-    return { userName: this._userName, userDescription: this._userDescription };
+    return {
+      userName: this._nameInput.value,
+      userDescription: this._aboutInput.value,
+    };
   }
   setUserInfo() {
-    this._profileName = document.querySelector(".profile__name");
-    this._profileDescription = document.querySelector(".profile__description");
-
-    this._profileName.textContent = this._userName;
-    this._profileDescription.textContent = this._userDescription;
+    this._userInfo = this.getUserInfo();
+    this._profileName.textContent = this._userInfo.userName;
+    this._profileDescription.textContent = this._userInfo.userDescription;
   }
 }

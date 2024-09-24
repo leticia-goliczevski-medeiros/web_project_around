@@ -1,9 +1,9 @@
 export default class Card {
-  constructor(data) {
-    this._name = data.item.name;
-    this._link = data.item.link;
-    this._templateSelector = data.templateSelector;
-    this._openPopup = data.openPopup;
+  constructor({ item, templateSelector, openPopup }) {
+    this._name = item.name;
+    this._link = item.link;
+    this._templateSelector = templateSelector;
+    this._openPopup = openPopup;
   }
   _getTemplate() {
     const templateElement = document.querySelector(
@@ -32,9 +32,9 @@ export default class Card {
   _setEventListeners() {
     const cardImage = this._element.querySelector(".gallery__card-image");
 
-    cardImage.addEventListener("click", (event) => {
-      this._openPopup(event);
-      this._enableExpandingImage();
+    cardImage.addEventListener("click", () => {
+      this._openPopup({ name: this._name, link: this._link });
+      // this._enableExpandingImage();
     });
 
     this._element
@@ -49,12 +49,12 @@ export default class Card {
         this._enableLikeButton();
       });
   }
-  _enableExpandingImage() {
-    const expandedImage = document.querySelector(".image-popup__image");
-    expandedImage.setAttribute("src", `${this._link}`);
+  // _enableExpandingImage() {
+  //   const expandedImage = document.querySelector(".image-popup__image");
+  //   expandedImage.setAttribute("src", `${this._link}`);
 
-    document.querySelector(".image-popup__title").textContent = this._name;
-  }
+  //   document.querySelector(".image-popup__title").textContent = this._name;
+  // }
   _enableDeletingCards() {
     this._element.remove();
   }

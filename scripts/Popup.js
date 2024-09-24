@@ -1,4 +1,4 @@
-class Popup {
+export default class Popup {
   constructor(popupSelector) {
     this._popup = document.querySelector(popupSelector);
     this._popupSection = this._popup.parentElement;
@@ -11,10 +11,7 @@ class Popup {
   }
   close() {
     this._popupSection.classList.remove("popup_popup_opened");
-
-    // document.removeEventListener("keydown", closePopupWithEsc);
-    // popupSection.removeEventListener("click", closePopupWithClick);
-    // closeButton.removeEventListener("click", closePopup);   como remover os eventos? foram usadas arrow functions
+    //remover eventos no próximo sprint
   }
   _handleEscClose(event) {
     if (event.key === "Escape") {
