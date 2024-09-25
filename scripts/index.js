@@ -1,4 +1,4 @@
-import { FormValidator, config } from "./FormValidator.js";
+import { FormValidator, config, resetValidation } from "./FormValidator.js";
 import Section from "./Section.js";
 import Card from "./Card.js";
 import UserInfo from "./UserInfo.js";
@@ -103,8 +103,9 @@ const editProfilePopup = new PopupWithForm({
   formSubmiter: (event) => {
     event.preventDefault();
 
-    userInfo.setUserInfo(); //não está funcionando na segunda vez
+    userInfo.setUserInfo();
   },
+  formResetter: resetValidation,
 });
 const editProfileButton = document.querySelector(".profile__edit-icon");
 editProfileButton.addEventListener("click", () => {
@@ -124,27 +125,23 @@ const addCardPopup = new PopupWithForm({
       link: inputLink.value,
     };
     //revisar nome das instâncias
-    const addedCard = new Section(
-      {
-        items: [item],
-        renderer: (item) => {
-          const card = new Card({
-            item,
-            templateSelector: "#card-template",
-            openPopup: (item) => popupWithImage.open(item),
-          });
-          const cardElement = card.generateCard();
-          cardElement.addItem();
-        },
-      },
-      ".gallery__cards"
-    );
-    addedCard.renderItems();
+
+    const card = new Card({
+      item,
+      templateSelector: "#card-template",
+      openPopup: (item) => popupWithImage.open(item),
+    });
+    const cardElement = card.generateCard();
+    cardRenderer.addItem(cardElement);
 
     /* depois que um card é adicionado, na próxima vez que o popup for aberto, o botão criar já estará desativado */
+    const createButton = document.querySelector(
+      ".add-card-popup__submit-button"
+    );
     createButton.classList.add("popup__submit-button_inactive");
     createButton.setAttribute("disabled", true);
   },
+  formResetter: resetValidation,
 });
 const addCardButton = document.querySelector(".profile__add-button");
 addCardButton.addEventListener("click", () => {

@@ -1,10 +1,12 @@
 import Popup from "./Popup.js";
 
 export default class PopupWithForm extends Popup {
-  constructor({ popupSelector, formSubmiter }) {
+  constructor({ popupSelector, formSubmiter, formResetter }) {
     super(popupSelector);
     this._formSubmiter = formSubmiter;
     this._popupForm = this._popup.querySelector(".popup__form");
+    this._formResetter = formResetter;
+    this.close = this.close.bind(this);
   }
 
   _getInputValues() {
@@ -14,15 +16,15 @@ export default class PopupWithForm extends Popup {
   setEventListeners() {
     super.setEventListeners();
 
-    this._popupForm.addEventListener("submit", (event) => {
-      this._formSubmiter(event);
-      this.close();
-    });
-    // adicionar o ouvinte de eventos click para o ícone de fechamento. Mas a classe popup já faz isso
+    this._popupForm.addEventListener("submit", this._sumbitHandler);
+  }
+  _sumbitHandler(event) {
+    this._formSubmiter(event);
+    this.close();
   }
   close() {
+    this._formResetter();
     super.close();
-
-    //this._popupForm.reset();          //importar a função resetValidation?
+    this._popupForm.removeEventListener("submit", this._sumbitHandler);
   }
 }
