@@ -143,6 +143,7 @@ const addCardPopup = new PopupWithForm({
   },
   formResetter: resetValidation,
 });
+
 const addCardButton = document.querySelector(".profile__add-button");
 addCardButton.addEventListener("click", () => {
   addCardPopup.open();
