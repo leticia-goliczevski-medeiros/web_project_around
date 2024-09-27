@@ -5,6 +5,7 @@ import UserInfo from "./UserInfo.js";
 import PopupWithImage from "./PopupWithImage.js";
 import PopupWithForm from "./PopupWithForm.js";
 
+// Carrega informações do usuário na tela
 const userInfo = new UserInfo({
   profileNameSelector: ".profile__name",
   profileDescriptionSelector: ".profile__description",
@@ -67,7 +68,7 @@ formList.forEach((formElement) => {
   validation.enableValidation(config, formElement);
 });
 
-const editProfilePopup = new PopupWithForm({
+const editProfilePopupWithForm = new PopupWithForm({
   popupSelector: ".edit-profile-popup__container",
   formSubmiter: (event) => {
     event.preventDefault();
@@ -78,10 +79,10 @@ const editProfilePopup = new PopupWithForm({
 });
 const editProfileButton = document.querySelector(".profile__edit-icon");
 editProfileButton.addEventListener("click", () => {
-  editProfilePopup.open();
+  editProfilePopupWithForm.open();
 });
 
-const addCardPopup = new PopupWithForm({
+const addCardPopupWithForm = new PopupWithForm({
   popupSelector: ".add-card-popup__container",
   formSubmiter: (event) => {
     event.preventDefault();
@@ -102,7 +103,7 @@ const addCardPopup = new PopupWithForm({
     const cardElement = card.generateCard();
     cardRenderer.addItem(cardElement);
 
-    /*depois que um card é adicionado, na próxima vez que o popup for aberto, o botão criar já estará desativado */
+    /*Depois que um card é adicionado, na próxima vez que o popup for aberto, o botão criar já estará desativado */
     const createButton = document.querySelector(
       ".add-card-popup__submit-button"
     );
@@ -114,5 +115,5 @@ const addCardPopup = new PopupWithForm({
 
 const addCardButton = document.querySelector(".profile__add-button");
 addCardButton.addEventListener("click", () => {
-  addCardPopup.open();
+  addCardPopupWithForm.open();
 });
