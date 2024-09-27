@@ -1,9 +1,9 @@
 export default class Card {
-  constructor({ item, templateSelector, openPopup }) {
+  constructor({ item, templateSelector, handleCardClick }) {
     this._name = item.name;
     this._link = item.link;
     this._templateSelector = templateSelector;
-    this._openPopup = openPopup;
+    this._handleCardClick = handleCardClick;
   }
   _getTemplate() {
     const templateElement = document.querySelector(
@@ -33,7 +33,7 @@ export default class Card {
     const cardImage = this._element.querySelector(".gallery__card-image");
 
     cardImage.addEventListener("click", () => {
-      this._openPopup({ name: this._name, link: this._link });
+      this._handleCardClick({ name: this._name, link: this._link });
       // this._enableExpandingImage();
     });
 

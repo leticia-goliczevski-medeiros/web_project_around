@@ -67,7 +67,7 @@ const cardRenderer = new Section(
       const card = new Card({
         item,
         templateSelector: "#card-template",
-        openPopup: (item) => popupWithImage.open(item),
+        handleCardClick: (item) => popupWithImage.open(item),
       });
 
       const cardElement = card.generateCard();
@@ -129,7 +129,7 @@ const addCardPopup = new PopupWithForm({
     const card = new Card({
       item,
       templateSelector: "#card-template",
-      openPopup: (item) => popupWithImage.open(item),
+      handleCardClick: (item) => popupWithImage.open(item),
     });
     const cardElement = card.generateCard();
     cardRenderer.addItem(cardElement);
