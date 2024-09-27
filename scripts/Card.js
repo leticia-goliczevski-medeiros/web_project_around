@@ -34,7 +34,6 @@ export default class Card {
 
     cardImage.addEventListener("click", () => {
       this._handleCardClick({ name: this._name, link: this._link });
-      // this._enableExpandingImage();
     });
 
     this._element
@@ -49,12 +48,6 @@ export default class Card {
         this._enableLikeButton();
       });
   }
-  // _enableExpandingImage() {
-  //   const expandedImage = document.querySelector(".image-popup__image");
-  //   expandedImage.setAttribute("src", `${this._link}`);
-
-  //   document.querySelector(".image-popup__title").textContent = this._name;
-  // }
   _enableDeletingCards() {
     this._element.remove();
   }
