@@ -1,9 +1,13 @@
-import { FormValidator, config, resetValidation } from "./FormValidator.js";
-import Section from "./Section.js";
-import Card from "./Card.js";
-import UserInfo from "./UserInfo.js";
-import PopupWithImage from "./PopupWithImage.js";
-import PopupWithForm from "./PopupWithForm.js";
+import {
+  FormValidator,
+  config,
+  resetValidation,
+} from "../components/FormValidator.js";
+import Section from "../components/Section.js";
+import Card from "../components/Card.js";
+import UserInfo from "../components/UserInfo.js";
+import PopupWithImage from "../components/PopupWithImage.js";
+import PopupWithForm from "../components/PopupWithForm.js";
 
 // Carrega informações do usuário na tela
 const userInfo = new UserInfo({
