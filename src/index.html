@@ -10,14 +10,13 @@
     <meta name="keywords" content="Rede social, fotos, galeria" />
     <meta name="author" content="Letícia Goliczevski Medeiros" />
     <title>Around the U.S.</title>
-    <link rel="stylesheet" href="./page/index.css" />
   </head>
   <body>
     <div class="page">
       <header class="header">
         <img
           class="header__logo"
-          src="./images/around.png"
+          src="<%=require('./images/around.png')%>"
           alt="Logo escrito 'Around the U.S.'"
         />
       </header>
@@ -26,15 +25,16 @@
         <section class="profile">
           <img
             class="profile__picture"
-            src="./images/profile-picture.jpg"
-            alt="Foto de um homem sorridente de gorro vermelho, camisa azul com o mar ao fundo."
+            src="<%=require('./images/profile-picture.jpg')%>"
+            alt="Foto de um homem
+          sorridente de gorro vermelho, camisa azul com o mar ao fundo."
           />
           <div class="profile__information">
             <div class="profile__name-and-icon">
               <h1 class="profile__name"></h1>
               <img
                 class="profile__edit-icon"
-                src="./images/edit-button.png"
+                src="<%=require('./images/edit-button.png')%>"
                 alt="Ícone de editar."
               />
             </div>
@@ -43,7 +43,7 @@
           <button class="profile__add-button">
             <img
               class="profile__add-button-plus-sign"
-              src="./images/plus-sign.png"
+              src="<%=require('./images/plus-sign.png')%>"
               alt="Ícone de adicionar."
             />
           </button>
@@ -56,14 +56,14 @@
                 <img class="gallery__card-image" src=" " />
                 <img
                   class="gallery__delete-icon"
-                  src="./images/delete-icon.png"
+                  src="<%=require('./images/delete-icon.png')%>"
                   alt="Ícone de excluir."
                 />
                 <div class="gallery__card-info">
                   <h2 class="gallery__card-title">Título</h2>
                   <img
                     class="gallery__heart-icon"
-                    src="./images/heart-icon.png"
+                    src="<%=require('./images/heart-icon.png')%>"
                     alt="Ícone de coração."
                   />
                 </div>
@@ -76,7 +76,7 @@
           <div class="popup__container edit-profile-popup__container">
             <img
               class="popup__close-icon edit-profile-popup__close-icon"
-              src="./images/close-icon.png"
+              src="<%=require('./images/close-icon.png')%>"
               alt="Ícone de fechar."
             />
             <h2 class="popup__title">Editar perfil</h2>
@@ -121,7 +121,7 @@
           <div class="popup__container add-card-popup__container">
             <img
               class="popup__close-icon add-card-popup__close-icon"
-              src="./images/close-icon.png"
+              src="<%=require('./images/close-icon.png')%>"
               alt="Ícone de fechar."
             />
             <h2 class="popup__title">Novo local</h2>
@@ -162,7 +162,7 @@
           <div class="image-popup__container">
             <img
               class="popup__close-icon"
-              src="./images/close-icon.png"
+              src="<%=require('./images/close-icon.png')%>"
               alt="Ícone de fechar."
             />
             <img class="image-popup__image" src=" " />
@@ -174,7 +174,5 @@
         <p class="footer__copyright">&#169; 2024 Around The U.S.</p>
       </footer>
     </div>
-
-    <script src="./page/index.js" type="module"></script>
   </body>
 </html>

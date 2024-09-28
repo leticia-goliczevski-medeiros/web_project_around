@@ -1,3 +1,4 @@
+import "./index.css";
 import {
   FormValidator,
   config,
@@ -17,30 +18,46 @@ const userInfo = new UserInfo({
 userInfo.setUserInfo();
 
 /* Cartões iniciais sendo adicionados via JS assim que a página carrega */
+const ilhaKauaiImage = new URL("../images/kauai-havai.jpg", import.meta.url);
+const grandCanyonImage = new URL("../images/grand-canyon.jpg", import.meta.url);
+const rockyMountainImage = new URL(
+  "../images/parque-nacional-rocky-mountain.jpg",
+  import.meta.url
+);
+const yellowstoneImage = new URL(
+  "../images/yellowstone-national-park.jpg",
+  import.meta.url
+);
+const lagoHaiyahaImage = new URL("../images/lago-haiyaha.jpg", import.meta.url);
+const yosemiteImage = new URL(
+  "../images/vale-de-yosemite.jpg",
+  import.meta.url
+);
+
 const initialCards = [
   {
     name: "Ilha Kauai",
-    link: "./images/kauai-havai.jpg",
+    link: ilhaKauaiImage,
   },
   {
     name: "Grand Canyon",
-    link: "./images/grand-canyon.jpg",
+    link: grandCanyonImage,
   },
   {
     name: "Parque Nacional Rocky Mountain",
-    link: "./images/parque-nacional-rocky-mountain.jpg",
+    link: rockyMountainImage,
   },
   {
     name: "Parque Nacional Yellowstone",
-    link: "./images/yellowstone-national-park.jpg",
+    link: yellowstoneImage,
   },
   {
     name: "Lago Haiyaha",
-    link: "./images/lago-haiyaha.jpg",
+    link: lagoHaiyahaImage,
   },
   {
     name: "Vale de Yosemite",
-    link: "./images/vale-de-yosemite.jpg",
+    link: yosemiteImage,
   },
 ];
 
