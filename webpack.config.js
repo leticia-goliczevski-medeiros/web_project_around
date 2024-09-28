@@ -12,6 +12,7 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     filename: "main.js",
     publicPath: "",
+    clean: true,
   },
   target: ["web", "es5"],
   stats: { children: true },
