@@ -53,11 +53,17 @@ export default class Card {
   }
   _enableLikeButton() {
     const likeButon = this._element.querySelector(".gallery__heart-icon");
+    const heartIcon = new URL("../images/heart-icon.png", import.meta.url);
+    const heartIconActive = new URL(
+      "../images/heart-icon.png",
+      import.meta.url
+    );
+
     const heartIconSource = likeButon.getAttribute("src");
-    if (heartIconSource === "./images/heart-icon.png") {
-      likeButon.setAttribute("src", "./images/heart-icon-active.png");
+    if (heartIconSource === heartIcon) {
+      likeButon.setAttribute("src", heartIconActive);
     } else {
-      likeButon.setAttribute("src", "./images/heart-icon.png");
+      likeButon.setAttribute("src", heartIcon);
     }
   }
 }
