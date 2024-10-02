@@ -53,14 +53,15 @@ export default class Card {
   }
   _enableLikeButton() {
     const likeButon = this._element.querySelector(".gallery__heart-icon");
+    const heartIconSource = likeButon.getAttribute("src");
+
     const heartIcon = new URL("../images/heart-icon.png", import.meta.url);
     const heartIconActive = new URL(
-      "../images/heart-icon.png",
+      "../images/heart-icon-active.png",
       import.meta.url
     );
 
-    const heartIconSource = likeButon.getAttribute("src");
-    if (heartIconSource === heartIcon) {
+    if (heartIcon.pathname.includes(heartIconSource)) {
       likeButon.setAttribute("src", heartIconActive);
     } else {
       likeButon.setAttribute("src", heartIcon);
