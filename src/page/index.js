@@ -9,6 +9,29 @@ import Card from "../components/Card.js";
 import UserInfo from "../components/UserInfo.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
+import API from "../components/API.js";
+
+const api = new API({
+  baseUrl: "https://around.nomoreparties.co/v1/web-ptbr-cohort-13",
+  headers: {
+    authorization: "43bee733-4d07-4864-b830-d3fe06d29659",
+    "Content-Type": "application/json",
+  },
+});
+api
+  .get("https://around.nomoreparties.co/v1/web-ptbr-cohort-13/users/me")
+  .then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Error: ${res.status}`);
+  })
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 
 // Carrega informações do usuário na tela
 const userInfo = new UserInfo({
