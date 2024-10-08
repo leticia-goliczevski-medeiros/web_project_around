@@ -21,18 +21,15 @@ export default class PopupWithForm extends Popup {
     this._popupForm.addEventListener("submit", this._sumbitHandler);
   }
   _sumbitHandler(event) {
-    this._formSubmiter(event);
+    this._inputsValues = this._getInputValues();
+    const name = this._inputsValues[0];
+    const about = this._inputsValues[1];
+    this._formSubmiter(event, name, about);
     this.close();
   }
   close() {
     super.close();
     this._popupForm.removeEventListener("submit", this._sumbitHandler);
-
-    //antes do formulário ser resetado, salvar o valor dos inputs
-    this._inputsValues = this._getInputValues();
     this._formResetter();
-    for (let i = 0; i < this._inputs.length; i++) {
-      this._inputs[i].value = this._inputsValues[i];
-    }
   }
 }

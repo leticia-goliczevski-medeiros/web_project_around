@@ -11,6 +11,7 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import API from "../components/API.js";
 
+/* Instância da API */
 const api = new API({
   baseUrl: "https://around.nomoreparties.co/v1/web-ptbr-cohort-13",
   headers: {
@@ -18,8 +19,15 @@ const api = new API({
     "Content-Type": "application/json",
   },
 });
+/* Busca usuário */
+let user;
+let userId;
+const userInfo = new UserInfo({
+  profileNameSelector: ".profile__name",
+  profileDescriptionSelector: ".profile__description",
+});
 api
-  .get("https://around.nomoreparties.co/v1/web-ptbr-cohort-13/users/me")
+  .getUser()
   .then((res) => {
     if (res.ok) {
       return res.json();
@@ -27,82 +35,95 @@ api
     return Promise.reject(`Error: ${res.status}`);
   })
   .then((result) => {
+    user = result;
+    userId = user._id;
     console.log(result);
+    console.log(userId);
+    // Carrega informações do usuário na tela
+    userInfo.setUserInfo(user);
   })
   .catch((error) => {
     console.log(error);
   });
 
-// Carrega informações do usuário na tela
-const userInfo = new UserInfo({
-  profileNameSelector: ".profile__name",
-  profileDescriptionSelector: ".profile__description",
-});
-userInfo.setUserInfo();
+/* Cartões iniciais sendo adicionados assim que a página carrega */
+let cardRenderer;
+let popupWithImage;
+api
+  .getInitialCards()
+  .then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Error: ${res.status}`);
+  })
+  .then((cards) => {
+    console.log("cards", cards);
+    popupWithImage = new PopupWithImage(".image-popup__container");
+    cardRenderer = new Section(
+      {
+        items: cards,
+        renderer: (item) => {
+          const card = new Card({
+            item,
+            templateSelector: "#card-template",
+            handleCardClick: (item) => popupWithImage.open(item),
+          });
 
-/* Cartões iniciais sendo adicionados via JS assim que a página carrega */
-const ilhaKauaiImage = new URL("../images/kauai-havai.jpg", import.meta.url);
-const grandCanyonImage = new URL("../images/grand-canyon.jpg", import.meta.url);
-const rockyMountainImage = new URL(
-  "../images/parque-nacional-rocky-mountain.jpg",
-  import.meta.url
-);
-const yellowstoneImage = new URL(
-  "../images/yellowstone-national-park.jpg",
-  import.meta.url
-);
-const lagoHaiyahaImage = new URL("../images/lago-haiyaha.jpg", import.meta.url);
-const yosemiteImage = new URL(
-  "../images/vale-de-yosemite.jpg",
-  import.meta.url
-);
+          const cardElement = card.generateCard();
+          cardRenderer.addItem(cardElement);
+        },
+      },
+      ".gallery__cards"
+    );
+    cardRenderer.renderItems();
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 
-const initialCards = [
-  {
-    name: "Ilha Kauai",
-    link: ilhaKauaiImage,
-  },
-  {
-    name: "Grand Canyon",
-    link: grandCanyonImage,
-  },
-  {
-    name: "Parque Nacional Rocky Mountain",
-    link: rockyMountainImage,
-  },
-  {
-    name: "Parque Nacional Yellowstone",
-    link: yellowstoneImage,
-  },
-  {
-    name: "Lago Haiyaha",
-    link: lagoHaiyahaImage,
-  },
-  {
-    name: "Vale de Yosemite",
-    link: yosemiteImage,
-  },
-];
+// const ilhaKauaiImage = new URL("../images/kauai-havai.jpg", import.meta.url);
+// const grandCanyonImage = new URL("../images/grand-canyon.jpg", import.meta.url);
+// const rockyMountainImage = new URL(
+//   "../images/parque-nacional-rocky-mountain.jpg",
+//   import.meta.url
+// );
+// const yellowstoneImage = new URL(
+//   "../images/yellowstone-national-park.jpg",
+//   import.meta.url
+// );
+// const lagoHaiyahaImage = new URL("../images/lago-haiyaha.jpg", import.meta.url);
+// const yosemiteImage = new URL(
+//   "../images/vale-de-yosemite.jpg",
+//   import.meta.url
+// );
 
-const popupWithImage = new PopupWithImage(".image-popup__container");
-
-const cardRenderer = new Section(
-  {
-    items: initialCards,
-    renderer: (item) => {
-      const card = new Card({
-        item,
-        templateSelector: "#card-template",
-        handleCardClick: (item) => popupWithImage.open(item),
-      });
-
-      const cardElement = card.generateCard();
-      cardRenderer.addItem(cardElement);
-    },
-  },
-  ".gallery__cards"
-);
-cardRenderer.renderItems();
+// const initialCards = [
+//   {
+//     name: "Ilha Kauai",
+//     link: ilhaKauaiImage,
+//   },
+//   {
+//     name: "Grand Canyon",
+//     link: grandCanyonImage,
+//   },
+//   {
+//     name: "Parque Nacional Rocky Mountain",
+//     link: rockyMountainImage,
+//   },
+//   {
+//     name: "Parque Nacional Yellowstone",
+//     link: yellowstoneImage,
+//   },
+//   {
+//     name: "Lago Haiyaha",
+//     link: lagoHaiyahaImage,
+//   },
+//   {
+//     name: "Vale de Yosemite",
+//     link: yosemiteImage,
+//   },
+// ];
 
 /* Aplicar validação aos formulários */
 const formList = Array.from(document.forms);
@@ -114,10 +135,40 @@ formList.forEach((formElement) => {
 
 const editProfilePopupWithForm = new PopupWithForm({
   popupSelector: ".edit-profile-popup__container",
-  formSubmiter: (event) => {
+  formSubmiter: (event, name, about) => {
     event.preventDefault();
 
-    userInfo.setUserInfo();
+    //atualiza os dados do usuário no servidor
+    api
+      .saveProfileInfo(name, about)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(`Error: ${res.status}`);
+      })
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    //pega os dados atualizados do usuário e mostra na tela
+    api
+      .getUser()
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(`Error: ${res.status}`);
+      })
+      .then((result) => {
+        user = result;
+        userInfo.setUserInfo(user);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
   formResetter: resetValidation,
 });
@@ -126,6 +177,21 @@ editProfileButton.addEventListener("click", () => {
   editProfilePopupWithForm.open();
 });
 
+api
+  .addCard()
+  .then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+    return Promise.reject(`Error: ${res.status}`);
+  })
+  .then((card) => {
+    console.log(card);
+    /* de const card até addItem() */
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 const addCardPopupWithForm = new PopupWithForm({
   popupSelector: ".add-card-popup__container",
   formSubmiter: (event) => {
