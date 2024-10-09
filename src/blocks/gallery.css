@@ -41,7 +41,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 25px 15px 31px 21px;
+  margin: 22px 18px 22px 21px;
 }
 .gallery__card-title {
   color: #000000;
@@ -49,10 +49,19 @@
   font-weight: 900;
   font-size: 24px;
   line-height: 1.21;
+  padding-top: 3px;
+  padding-bottom: 9px;
   margin: 0;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+.gallery__like-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  row-gap: 3px;
 }
 .gallery__heart-icon {
   width: 21px;
@@ -61,6 +70,14 @@
 .gallery__heart-icon:hover {
   cursor: pointer;
   opacity: 0.5;
+}
+.gallery__like-count {
+  color: #000000;
+  font-family: "Inter", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1;
+  margin: 0;
 }
 @media screen and (max-width: 1024px) {
   .gallery {
