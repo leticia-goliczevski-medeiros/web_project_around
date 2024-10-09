@@ -19,7 +19,7 @@ const api = new API({
     "Content-Type": "application/json",
   },
 });
-/* Busca usuário */
+/* Buscar usuário */
 let user;
 let userId;
 const userInfo = new UserInfo({
@@ -35,16 +35,86 @@ api
     return Promise.reject(`Error: ${res.status}`);
   })
   .then((result) => {
+    console.log(result);
     user = result;
     userId = user._id;
-    console.log(result);
-    console.log(userId);
     // Carrega informações do usuário na tela
     userInfo.setUserInfo(user);
   })
   .catch((error) => {
     console.log(error);
   });
+
+//função parâmetro da classe Card. Ela solicita o objeto com informações do usuário, coloca ele no vetor de likes do cartão e manda as informações do cartão para o servidor para atualização
+function addLike(item) {
+  api
+    .getUser()
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Error: ${res.status}`);
+    })
+    .then((result) => {
+      const updatedUser = result;
+      item.likes.push(updatedUser);
+      const cardId = item._id;
+
+      api
+        .addCardLike(item, cardId)
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+          return Promise.reject(`Error: ${res.status}`);
+        })
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+//função parâmetro da classe Card. Ela solicita o objeto com informações do usuário, remove ele do vetor de likes do cartão e manda as informações do cartão para o servidor para atualização
+function removeLike(item) {
+  api
+    .getUser()
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Error: ${res.status}`);
+    })
+    .then((result) => {
+      const updatedUser = result;
+      item.likes = item.likes.filter((like) => {
+        return like != updatedUser;
+      });
+      const cardId = item._id;
+
+      api
+        .removeCardLike(item, cardId)
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          }
+          return Promise.reject(`Error: ${res.status}`);
+        })
+        .then((result) => {
+          console.log(result);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
 
 /* Cartões iniciais sendo adicionados assim que a página carrega */
 let cardRenderer;
@@ -58,7 +128,7 @@ api
     return Promise.reject(`Error: ${res.status}`);
   })
   .then((cards) => {
-    console.log("cards", cards);
+    console.log(cards);
     popupWithImage = new PopupWithImage(".image-popup__container");
     cardRenderer = new Section(
       {
@@ -68,6 +138,8 @@ api
             item,
             templateSelector: "#card-template",
             handleCardClick: (item) => popupWithImage.open(item),
+            addLike,
+            removeLike,
           });
 
           const cardElement = card.generateCard();
@@ -135,8 +207,11 @@ formList.forEach((formElement) => {
 
 const editProfilePopupWithForm = new PopupWithForm({
   popupSelector: ".edit-profile-popup__container",
-  formSubmiter: (event, name, about) => {
+  formSubmiter: (event, inputsValues) => {
     event.preventDefault();
+
+    const name = inputsValues[0];
+    const about = inputsValues[1];
 
     //atualiza os dados do usuário no servidor
     api
@@ -148,22 +223,8 @@ const editProfilePopupWithForm = new PopupWithForm({
         return Promise.reject(`Error: ${res.status}`);
       })
       .then((result) => {
-        console.log(result);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    //pega os dados atualizados do usuário e mostra na tela
-    api
-      .getUser()
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return Promise.reject(`Error: ${res.status}`);
-      })
-      .then((result) => {
         user = result;
+        //pega os dados atualizados do usuário e mostra na tela
         userInfo.setUserInfo(user);
       })
       .catch((error) => {
@@ -174,44 +235,54 @@ const editProfilePopupWithForm = new PopupWithForm({
 });
 const editProfileButton = document.querySelector(".profile__edit-icon");
 editProfileButton.addEventListener("click", () => {
+  /* quando o popup de editar perfil for aberto, os dados do usuário já vão aparecer nos campos*/
+  const info = userInfo.getUserInfo();
+  console.log(info);
+  document.querySelector(".edit-profile-popup__input_name").value =
+    info.userName;
+  document.querySelector(".edit-profile-popup__input_about").value =
+    info.userDescription;
   editProfilePopupWithForm.open();
 });
 
-api
-  .addCard()
-  .then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Error: ${res.status}`);
-  })
-  .then((card) => {
-    console.log(card);
-    /* de const card até addItem() */
-  })
-  .catch((error) => {
-    console.log(error);
-  });
 const addCardPopupWithForm = new PopupWithForm({
   popupSelector: ".add-card-popup__container",
-  formSubmiter: (event) => {
+  formSubmiter: (event, inputsValues) => {
     event.preventDefault();
 
-    const inputLink = document.querySelector(".add-card-popup__input_link");
-    const inputTitle = document.querySelector(".add-card-popup__input_title");
+    const name = inputsValues[0];
+    const link = inputsValues[1];
 
-    const item = {
-      name: inputTitle.value,
-      link: inputLink.value,
-    };
+    api
+      .addCard(name, link)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(`Error: ${res.status}`);
+      })
+      .then((result) => {
+        console.log(result);
+        const item = {
+          name: result.name,
+          link: result.link,
+          likes: result.likes,
+        };
 
-    const card = new Card({
-      item,
-      templateSelector: "#card-template",
-      handleCardClick: (item) => popupWithImage.open(item),
-    });
-    const cardElement = card.generateCard();
-    cardRenderer.addItem(cardElement);
+        //criar a instância do card e adicioná-lo na tela
+        const card = new Card({
+          item,
+          templateSelector: "#card-template",
+          handleCardClick: (item) => popupWithImage.open(item),
+          addLike,
+          removeLike,
+        });
+        const cardElement = card.generateCard();
+        cardRenderer.addItem(cardElement);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     /*Depois que um card é adicionado, na próxima vez que o popup for aberto, o botão criar já estará desativado */
     const createButton = document.querySelector(

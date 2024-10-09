@@ -1,9 +1,19 @@
 export default class Card {
-  constructor({ item, templateSelector, handleCardClick }) {
+  constructor({
+    item,
+    templateSelector,
+    handleCardClick,
+    addLike,
+    removeLike,
+  }) {
+    this._item = item;
     this._name = item.name;
     this._link = item.link;
+    this._likes = item.likes;
     this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;
+    this._addLike = addLike;
+    this._removeLike = removeLike;
   }
   _getTemplate() {
     const templateElement = document.querySelector(
@@ -63,8 +73,10 @@ export default class Card {
 
     if (heartIcon.pathname.includes(heartIconSource)) {
       likeButon.setAttribute("src", heartIconActive);
+      this._addLike(this._item);
     } else {
       likeButon.setAttribute("src", heartIcon);
+      this._removeLike(this._item);
     }
   }
 }

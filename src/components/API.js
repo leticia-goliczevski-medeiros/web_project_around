@@ -25,20 +25,34 @@ export default class API {
       }),
     });
   }
-  addCard({ name, link }) {
+  addCard(name, link) {
     return fetch(`${this._baseUrl}/cards`, {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify({
-        name: name,
-        about: link,
+        name,
+        link,
       }),
     });
   }
-  deleteCard(imageId) {
-    return fetch(`${this._baseUrl}/cards/${imageId}`, {
-      method: "DELETE",
+  addCardLike(item, cardId) {
+    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+      method: "PUT",
       headers: this._headers,
+      body: JSON.stringify({ item }),
     });
   }
+  removeCardLike(item, cardId) {
+    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+      method: "DELETE",
+      headers: this._headers,
+      body: JSON.stringify({ item }),
+    });
+  }
+  // deleteCard(imageId) {
+  //   return fetch(`${this._baseUrl}/cards/${imageId}`, {
+  //     method: "DELETE",
+  //     headers: this._headers,
+  //   });
+  // }
 }

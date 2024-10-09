@@ -21,10 +21,8 @@ export default class PopupWithForm extends Popup {
     this._popupForm.addEventListener("submit", this._sumbitHandler);
   }
   _sumbitHandler(event) {
-    this._inputsValues = this._getInputValues();
-    const name = this._inputsValues[0];
-    const about = this._inputsValues[1];
-    this._formSubmiter(event, name, about);
+    const inputsValues = this._getInputValues();
+    this._formSubmiter(event, inputsValues);
     this.close();
   }
   close() {
