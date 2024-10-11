@@ -19,7 +19,7 @@ const api = new API({
     "Content-Type": "application/json",
   },
 });
-/* Buscar usuário */
+/* Buscar usuário e depois disso coloca os cards na tela */
 let user;
 let userId;
 const userInfo = new UserInfo({
@@ -35,7 +35,6 @@ api
     return Promise.reject(`Error: ${res.status}`);
   })
   .then((result) => {
-    console.log(result);
     user = result;
     userId = user._id;
     // Carrega informações do usuário na tela
@@ -92,7 +91,14 @@ function removeLike(item) {
     .then((result) => {
       const updatedUser = result;
       item.likes = item.likes.filter((like) => {
-        return like != updatedUser;
+        const keysOfLike = Object.keys(like);
+        for (const key in keysOfLike) {
+          if (like[key] != updatedUser[key]) {
+            return true;
+          }
+        }
+
+        //return like != updatedUser;
       });
       const cardId = item._id;
 
@@ -115,6 +121,24 @@ function removeLike(item) {
       console.log(error);
     });
 }
+////função parâmetro da classe Card. Ela solicita o objeto com informações do usuário, verifica se o objeto está no vetor de likes do cartão e exibe o botão de like padrão ou o ativo
+// function checkUserLike() {
+//   api
+//     .getUser()
+//     .then((res) => {
+//       if (res.ok) {
+//         return res.json();
+//       }
+//       return Promise.reject(`Error: ${res.status}`);
+//     })
+//     .then((result) => {
+//       const updatedUser = result;
+
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// }
+// }
 
 /* Cartões iniciais sendo adicionados assim que a página carrega */
 let cardRenderer;
@@ -140,6 +164,7 @@ api
             handleCardClick: (item) => popupWithImage.open(item),
             addLike,
             removeLike,
+            user,
           });
 
           const cardElement = card.generateCard();
@@ -263,11 +288,7 @@ const addCardPopupWithForm = new PopupWithForm({
       })
       .then((result) => {
         console.log(result);
-        const item = {
-          name: result.name,
-          link: result.link,
-          likes: result.likes,
-        };
+        const item = result;
 
         //criar a instância do card e adicioná-lo na tela
         const card = new Card({
@@ -276,6 +297,7 @@ const addCardPopupWithForm = new PopupWithForm({
           handleCardClick: (item) => popupWithImage.open(item),
           addLike,
           removeLike,
+          user,
         });
         const cardElement = card.generateCard();
         cardRenderer.addItem(cardElement);

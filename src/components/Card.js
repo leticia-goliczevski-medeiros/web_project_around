@@ -5,6 +5,7 @@ export default class Card {
     handleCardClick,
     addLike,
     removeLike,
+    user,
   }) {
     this._item = item;
     this._name = item.name;
@@ -14,6 +15,7 @@ export default class Card {
     this._handleCardClick = handleCardClick;
     this._addLike = addLike;
     this._removeLike = removeLike;
+    this._user = user;
   }
   _getTemplate() {
     const templateElement = document.querySelector(
@@ -34,6 +36,32 @@ export default class Card {
       .querySelector(".gallery__card-title")
       .setAttribute("alt", this._name);
     this._element.querySelector(".gallery__card-image").src = this._link;
+    this._likeCount = this._likes.length;
+    this._element.querySelector(".gallery__like-count").textContent =
+      this._likeCount;
+    this._likeButton = this._element.querySelector(".gallery__heart-icon");
+
+    this._heartIcon = new URL("../images/heart-icon.png", import.meta.url);
+    this._heartIconActive = new URL(
+      "../images/heart-icon-active.png",
+      import.meta.url
+    );
+
+    //verifica se eu já curti o cartão para que apareça na tela o botão de like ativo. Compara dois objetos, cada objeto do vetor de likes do cartão com o objeto com os meus dados de usuário
+    const hasUserLike = this._likes.some((like) => {
+      const keysOfLike = Object.keys(like);
+      for (const key in keysOfLike) {
+        if (like[key] == this._user[key]) {
+          return true;
+        }
+      }
+    });
+
+    if (hasUserLike) {
+      this._likeButton.setAttribute("src", this._heartIconActive);
+    } else {
+      this._likeButton.setAttribute("src", this._heartIcon);
+    }
 
     this._setEventListeners();
 
@@ -52,31 +80,30 @@ export default class Card {
         this._enableDeletingCards();
       });
 
-    this._element
-      .querySelector(".gallery__heart-icon")
-      .addEventListener("click", () => {
-        this._enableLikeButton();
-      });
+    this._likeButton.addEventListener("click", () => {
+      this._enableLikeButton();
+    });
   }
   _enableDeletingCards() {
     this._element.remove();
   }
   _enableLikeButton() {
-    const likeButon = this._element.querySelector(".gallery__heart-icon");
-    const heartIconSource = likeButon.getAttribute("src");
-
-    const heartIcon = new URL("../images/heart-icon.png", import.meta.url);
-    const heartIconActive = new URL(
-      "../images/heart-icon-active.png",
-      import.meta.url
-    );
-
-    if (heartIcon.pathname.includes(heartIconSource)) {
-      likeButon.setAttribute("src", heartIconActive);
+    this._heartIconSource = this._likeButton.getAttribute("src");
+    if (this._heartIcon.href.includes(this._heartIconSource)) {
+      this._likeButton.setAttribute("src", this._heartIconActive);
       this._addLike(this._item);
+
+      /* atualizar contagem de likes */
+      this._likeCount++;
+      this._element.querySelector(".gallery__like-count").textContent =
+        this._likeCount;
     } else {
-      likeButon.setAttribute("src", heartIcon);
+      this._likeButton.setAttribute("src", this._heartIcon);
       this._removeLike(this._item);
+
+      this._likeCount--;
+      this._element.querySelector(".gallery__like-count").textContent =
+        this._likeCount;
     }
   }
 }
