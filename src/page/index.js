@@ -9,6 +9,7 @@ import Card from "../components/Card.js";
 import UserInfo from "../components/UserInfo.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
+import PopupWithConfirmation from "../components/PopupWithConfirmation.js";
 import API from "../components/API.js";
 
 /* Instância da API */
@@ -45,9 +46,12 @@ api
   });
 
 //função parâmetro da classe Card. Ela solicita o objeto com informações do usuário, coloca ele no vetor de likes do cartão e manda as informações do cartão para o servidor para atualização
-function addLike(item) {
+function addLike(item, user) {
+  item.likes.push(user);
+  const cardId = item._id;
+
   api
-    .getUser()
+    .addCardLike(item, cardId)
     .then((res) => {
       if (res.ok) {
         return res.json();
@@ -55,33 +59,23 @@ function addLike(item) {
       return Promise.reject(`Error: ${res.status}`);
     })
     .then((result) => {
-      const updatedUser = result;
-      item.likes.push(updatedUser);
-      const cardId = item._id;
-
-      api
-        .addCardLike(item, cardId)
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(`Error: ${res.status}`);
-        })
-        .then((result) => {
-          console.log(result);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      console.log(result);
     })
     .catch((error) => {
       console.log(error);
     });
 }
 //função parâmetro da classe Card. Ela solicita o objeto com informações do usuário, remove ele do vetor de likes do cartão e manda as informações do cartão para o servidor para atualização
-function removeLike(item) {
+function removeLike(item, userId) {
+  item.likes = item.likes.filter((like) => {
+    if (like._id != userId) {
+      return true;
+    }
+  });
+  const cardId = item._id;
+
   api
-    .getUser()
+    .removeCardLike(item, cardId)
     .then((res) => {
       if (res.ok) {
         return res.json();
@@ -89,56 +83,42 @@ function removeLike(item) {
       return Promise.reject(`Error: ${res.status}`);
     })
     .then((result) => {
-      const updatedUser = result;
-      item.likes = item.likes.filter((like) => {
-        const keysOfLike = Object.keys(like);
-        for (const key in keysOfLike) {
-          if (like[key] != updatedUser[key]) {
-            return true;
-          }
-        }
-
-        //return like != updatedUser;
-      });
-      const cardId = item._id;
-
-      api
-        .removeCardLike(item, cardId)
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-          return Promise.reject(`Error: ${res.status}`);
-        })
-        .then((result) => {
-          console.log(result);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      console.log(result);
     })
     .catch((error) => {
       console.log(error);
     });
 }
-////função parâmetro da classe Card. Ela solicita o objeto com informações do usuário, verifica se o objeto está no vetor de likes do cartão e exibe o botão de like padrão ou o ativo
-// function checkUserLike() {
-//   api
-//     .getUser()
-//     .then((res) => {
-//       if (res.ok) {
-//         return res.json();
-//       }
-//       return Promise.reject(`Error: ${res.status}`);
-//     })
-//     .then((result) => {
-//       const updatedUser = result;
+//função parâmetro da classe PopupWithConfirmation. Ela deleta o card do servidor usando a instância da classe API e remove o card da árvore DOM
+function removeCard(cardId, DOMElement) {
+  api
+    .deleteCard(cardId)
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Error: ${res.status}`);
+    })
+    .then((result) => {
+      console.log(result);
 
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// }
-// }
+      DOMElement.remove();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+//função parâmetro de Card dita o que ocorre quando se clica no delete icon
+function handleDeleteClick(cardId, DOMElement) {
+  const popupWithConfirmation = new PopupWithConfirmation({
+    popupSelector: ".popup-with-confirmation__container",
+    removeCard,
+    cardId,
+    DOMElement,
+  });
+
+  popupWithConfirmation.open();
+}
 
 /* Cartões iniciais sendo adicionados assim que a página carrega */
 let cardRenderer;
@@ -165,6 +145,8 @@ api
             addLike,
             removeLike,
             user,
+            removeCard,
+            handleDeleteClick,
           });
 
           const cardElement = card.generateCard();
@@ -298,6 +280,8 @@ const addCardPopupWithForm = new PopupWithForm({
           addLike,
           removeLike,
           user,
+          removeCard,
+          handleDeleteClick,
         });
         const cardElement = card.generateCard();
         cardRenderer.addItem(cardElement);

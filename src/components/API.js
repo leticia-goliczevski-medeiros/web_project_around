@@ -49,10 +49,10 @@ export default class API {
       body: JSON.stringify({ item }),
     });
   }
-  // deleteCard(imageId) {
-  //   return fetch(`${this._baseUrl}/cards/${imageId}`, {
-  //     method: "DELETE",
-  //     headers: this._headers,
-  //   });
-  // }
+  deleteCard(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}`, {
+      method: "DELETE",
+      headers: this._headers,
+    });
+  }
 }

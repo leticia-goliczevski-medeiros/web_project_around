@@ -37,6 +37,9 @@
   cursor: pointer;
   opacity: 0.6;
 }
+.gallery__delete-icon_inactive {
+  display: none;
+}
 .gallery__card-info {
   display: flex;
   justify-content: space-between;
