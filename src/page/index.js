@@ -244,7 +244,6 @@ const editProfileButton = document.querySelector(".profile__edit-icon");
 editProfileButton.addEventListener("click", () => {
   /* quando o popup de editar perfil for aberto, os dados do usuário já vão aparecer nos campos*/
   const info = userInfo.getUserInfo();
-  console.log(info);
   document.querySelector(".edit-profile-popup__input_name").value =
     info.userName;
   document.querySelector(".edit-profile-popup__input_about").value =
@@ -303,4 +302,33 @@ const addCardPopupWithForm = new PopupWithForm({
 const addCardButton = document.querySelector(".profile__add-button");
 addCardButton.addEventListener("click", () => {
   addCardPopupWithForm.open();
+});
+
+const profilePicturePopupWithForm = new PopupWithForm({
+  popupSelector: ".update-profile-picture-popup__container",
+  formSubmiter: (event, inputsValues) => {
+    event.preventDefault();
+
+    const avatar = inputsValues[0];
+
+    api
+      .updateProfilePicture(avatar)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(`Error: ${res.status}`);
+      })
+      .then((userData) => {
+        userInfo.setUserInfo(userData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
+  formResetter: resetValidation,
+});
+const profilePicture = document.querySelector(".profile__picture-container");
+profilePicture.addEventListener("click", () => {
+  profilePicturePopupWithForm.open();
 });

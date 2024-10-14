@@ -4,10 +4,7 @@ export default class UserInfo {
     this._profileDescription = document.querySelector(
       profileDescriptionSelector
     );
-    // this._nameInput = document.querySelector(".edit-profile-popup__input_name");
-    // this._aboutInput = document.querySelector(
-    //   ".edit-profile-popup__input_about"
-    // );
+    this._profilePicture = document.querySelector(".profile__picture");
   }
   getUserInfo() {
     return {
@@ -18,5 +15,6 @@ export default class UserInfo {
   setUserInfo(user) {
     this._profileName.textContent = user.name;
     this._profileDescription.textContent = user.about;
+    this._profilePicture.setAttribute("src", user.avatar);
   }
 }
