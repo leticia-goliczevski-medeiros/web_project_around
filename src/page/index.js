@@ -161,49 +161,6 @@ api
     console.log(error);
   });
 
-// const ilhaKauaiImage = new URL("../images/kauai-havai.jpg", import.meta.url);
-// const grandCanyonImage = new URL("../images/grand-canyon.jpg", import.meta.url);
-// const rockyMountainImage = new URL(
-//   "../images/parque-nacional-rocky-mountain.jpg",
-//   import.meta.url
-// );
-// const yellowstoneImage = new URL(
-//   "../images/yellowstone-national-park.jpg",
-//   import.meta.url
-// );
-// const lagoHaiyahaImage = new URL("../images/lago-haiyaha.jpg", import.meta.url);
-// const yosemiteImage = new URL(
-//   "../images/vale-de-yosemite.jpg",
-//   import.meta.url
-// );
-
-// const initialCards = [
-//   {
-//     name: "Ilha Kauai",
-//     link: ilhaKauaiImage,
-//   },
-//   {
-//     name: "Grand Canyon",
-//     link: grandCanyonImage,
-//   },
-//   {
-//     name: "Parque Nacional Rocky Mountain",
-//     link: rockyMountainImage,
-//   },
-//   {
-//     name: "Parque Nacional Yellowstone",
-//     link: yellowstoneImage,
-//   },
-//   {
-//     name: "Lago Haiyaha",
-//     link: lagoHaiyahaImage,
-//   },
-//   {
-//     name: "Vale de Yosemite",
-//     link: yosemiteImage,
-//   },
-// ];
-
 /* Aplicar validação aos formulários */
 const formList = Array.from(document.forms);
 
@@ -219,6 +176,10 @@ const editProfilePopupWithForm = new PopupWithForm({
 
     const name = inputsValues[0];
     const about = inputsValues[1];
+
+    //UX
+    const button = document.querySelector(".edit-profile-popup__submit-button");
+    button.textContent = "Salvando...";
 
     //atualiza os dados do usuário no servidor
     api
@@ -236,6 +197,9 @@ const editProfilePopupWithForm = new PopupWithForm({
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        button.textContent = "Salvar";
       });
   },
   formResetter: resetValidation,
@@ -258,6 +222,12 @@ const addCardPopupWithForm = new PopupWithForm({
 
     const name = inputsValues[0];
     const link = inputsValues[1];
+
+    //UX
+    const createButton = document.querySelector(
+      ".add-card-popup__submit-button"
+    );
+    createButton.textContent = "Salvando...";
 
     api
       .addCard(name, link)
@@ -287,12 +257,12 @@ const addCardPopupWithForm = new PopupWithForm({
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        createButton.textContent = "Criar";
       });
 
     /*Depois que um card é adicionado, na próxima vez que o popup for aberto, o botão criar já estará desativado */
-    const createButton = document.querySelector(
-      ".add-card-popup__submit-button"
-    );
     createButton.classList.add("popup__submit-button_inactive");
     createButton.setAttribute("disabled", true);
   },
@@ -311,6 +281,12 @@ const profilePicturePopupWithForm = new PopupWithForm({
 
     const avatar = inputsValues[0];
 
+    //UX
+    const button = document.querySelector(
+      ".update-profile-picture-popup__submit-button"
+    );
+    button.textContent = "Salvando...";
+
     api
       .updateProfilePicture(avatar)
       .then((res) => {
@@ -324,6 +300,9 @@ const profilePicturePopupWithForm = new PopupWithForm({
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        button.textContent = "Salvar";
       });
   },
   formResetter: resetValidation,
