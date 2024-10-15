@@ -20,30 +20,6 @@ const api = new API({
     "Content-Type": "application/json",
   },
 });
-/* Buscar usuário e depois disso coloca os cards na tela */
-let user;
-let userId;
-const userInfo = new UserInfo({
-  profileNameSelector: ".profile__name",
-  profileDescriptionSelector: ".profile__description",
-});
-api
-  .getUser()
-  .then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-    return Promise.reject(`Error: ${res.status}`);
-  })
-  .then((result) => {
-    user = result;
-    userId = user._id;
-    // Carrega informações do usuário na tela
-    userInfo.setUserInfo(user);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
 
 //função parâmetro da classe Card. Ela solicita o objeto com informações do usuário, coloca ele no vetor de likes do cartão e manda as informações do cartão para o servidor para atualização
 function addLike(item, user) {
@@ -120,42 +96,66 @@ function handleDeleteClick(cardId, DOMElement) {
   popupWithConfirmation.open();
 }
 
-/* Cartões iniciais sendo adicionados assim que a página carrega */
+/* Buscar usuário e depois disso coloca os cards na tela */
+let user;
 let cardRenderer;
 let popupWithImage;
+const userInfo = new UserInfo({
+  profileNameSelector: ".profile__name",
+  profileDescriptionSelector: ".profile__description",
+});
 api
-  .getInitialCards()
+  .getUser()
   .then((res) => {
     if (res.ok) {
       return res.json();
     }
     return Promise.reject(`Error: ${res.status}`);
   })
-  .then((cards) => {
-    console.log(cards);
-    popupWithImage = new PopupWithImage(".image-popup__container");
-    cardRenderer = new Section(
-      {
-        items: cards,
-        renderer: (item) => {
-          const card = new Card({
-            item,
-            templateSelector: "#card-template",
-            handleCardClick: (item) => popupWithImage.open(item),
-            addLike,
-            removeLike,
-            user,
-            removeCard,
-            handleDeleteClick,
-          });
+  .then((result) => {
+    user = result;
 
-          const cardElement = card.generateCard();
-          cardRenderer.addItem(cardElement);
-        },
-      },
-      ".gallery__cards"
-    );
-    cardRenderer.renderItems();
+    // Carrega informações do usuário na tela
+    userInfo.setUserInfo(user);
+
+    /* Cartões iniciais sendo adicionados assim que a página carrega */
+    api
+      .getInitialCards()
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+        return Promise.reject(`Error: ${res.status}`);
+      })
+      .then((cards) => {
+        console.log(cards);
+        popupWithImage = new PopupWithImage(".image-popup__container");
+        cardRenderer = new Section(
+          {
+            items: cards,
+            renderer: (item) => {
+              const card = new Card({
+                item,
+                templateSelector: "#card-template",
+                handleCardClick: (item) => popupWithImage.open(item),
+                addLike,
+                removeLike,
+                user,
+                removeCard,
+                handleDeleteClick,
+              });
+
+              const cardElement = card.generateCard();
+              cardRenderer.addItem(cardElement);
+            },
+          },
+          ".gallery__cards"
+        );
+        cardRenderer.renderItems();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   })
   .catch((error) => {
     console.log(error);
