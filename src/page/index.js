@@ -96,7 +96,7 @@ function handleDeleteClick(cardId, DOMElement) {
   popupWithConfirmation.open();
 }
 
-/* Buscar usuário e depois disso coloca os cards na tela */
+/* Busca usuário e depois disso coloca os cards na tela */
 let user;
 let cardRenderer;
 let popupWithImage;
