@@ -129,10 +129,11 @@ api
       })
       .then((cards) => {
         console.log(cards);
+        const reversedCards = cards.reverse();
         popupWithImage = new PopupWithImage(".image-popup__container");
         cardRenderer = new Section(
           {
-            items: cards,
+            items: reversedCards,
             renderer: (item) => {
               const card = new Card({
                 item,
