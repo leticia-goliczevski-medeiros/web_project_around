@@ -14,9 +14,14 @@ import API from "../components/API.js";
 
 /* Instância da API */
 const api = new API({
-  baseUrl: "https://around.nomoreparties.co/v1/web-ptbr-cohort-13",
+  makeRequest: (endpoint, requestOptions) => {
+    return fetch(
+      `https://around-api.pt-br.tripleten-services.com/v1/${endpoint}`,
+      requestOptions
+    );
+  },
   headers: {
-    authorization: "43bee733-4d07-4864-b830-d3fe06d29659",
+    authorization: "46bfb3be-dbce-4d6f-9db9-127f775222d9",
     "Content-Type": "application/json",
   },
 });

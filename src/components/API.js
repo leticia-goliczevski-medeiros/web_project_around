@@ -1,65 +1,91 @@
 export default class API {
-  constructor({ baseUrl, headers }) {
-    this._baseUrl = baseUrl;
+  constructor({ makeRequest, headers }) {
+    this._makeRequest = makeRequest;
     this._headers = headers;
   }
   getUser() {
-    return fetch(`${this._baseUrl}/users/me`, {
+    const endpoint = "users/me";
+    const requestOptions = {
       method: "GET",
       headers: this._headers,
-    });
+    };
+    return this._makeRequest(endpoint, requestOptions);
   }
+
   getInitialCards() {
-    return fetch(`${this._baseUrl}/cards`, {
+    const endpoint = "cards";
+    const requestOptions = {
       method: "GET",
       headers: this._headers,
-    });
+    };
+    return this._makeRequest(endpoint, requestOptions);
   }
-  saveProfileInfo(name, about) {
-    return fetch(`${this._baseUrl}/users/me`, {
+
+  saveProfileInfo(userObject) {
+    const endpoint = "users/me";
+    const requestOptions = {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({
-        name: name,
-        about: about,
+        name: userObject.name,
+        about: userObject.about,
       }),
-    });
+    };
+
+    return this._makeRequest(endpoint, requestOptions);
   }
+
   addCard(name, link) {
-    return fetch(`${this._baseUrl}/cards`, {
+    const endpoint = "cards";
+    const requestOptions = {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify({
         name,
         link,
       }),
-    });
+    };
+
+    return this._makeRequest(endpoint, requestOptions);
   }
-  addCardLike(item, cardId) {
-    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+
+  addCardLike(cardId) {
+    const endpoint = `cards/${cardId}/likes`;
+    const requestOptions = {
       method: "PUT",
       headers: this._headers,
-      body: JSON.stringify(item),
-    });
+    };
+
+    return this._makeRequest(endpoint, requestOptions);
   }
-  removeCardLike(item, cardId) {
-    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+
+  removeCardLike(cardId) {
+    const endpoint = `cards/${cardId}/likes`;
+    const requestOptions = {
       method: "DELETE",
       headers: this._headers,
-      body: JSON.stringify({ item }),
-    });
+    };
+
+    return this._makeRequest(endpoint, requestOptions);
   }
+
   deleteCard(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}`, {
+    const endpoint = `cards/${cardId}`;
+    const requestOptions = {
       method: "DELETE",
       headers: this._headers,
-    });
+    };
+
+    return this._makeRequest(endpoint, requestOptions);
   }
   updateProfilePicture(avatar) {
-    return fetch(`${this._baseUrl}/users/me/avatar`, {
+    const endpoint = `users/me/avatar`;
+    const requestOptions = {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({ avatar }),
-    });
+    };
+
+    return this._makeRequest(endpoint, requestOptions);
   }
 }
