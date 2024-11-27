@@ -12,7 +12,6 @@ import PopupWithForm from "../components/PopupWithForm.js";
 import PopupWithConfirmation from "../components/PopupWithConfirmation.js";
 import API from "../components/API.js";
 
-/* Instância da API */
 const api = new API({
   makeRequest: (endpoint, requestOptions) => {
     return fetch(
@@ -26,13 +25,13 @@ const api = new API({
   },
 });
 
-//função parâmetro da classe Card. Ela solicita o objeto com informações do usuário, coloca ele no vetor de likes do cartão e manda as informações do cartão para o servidor para atualização
-function addLike(item, user) {
-  item.likes.push(user);
+//função parâmetro da classe Card
+function addLike(item) {
+  item.isLiked = true;
   const cardId = item._id;
 
   api
-    .addCardLike(item, cardId)
+    .addCardLike(cardId)
     .then((res) => {
       if (res.ok) {
         return res.json();
@@ -46,17 +45,13 @@ function addLike(item, user) {
       console.log(error);
     });
 }
-//função parâmetro da classe Card. Ela solicita o objeto com informações do usuário, remove ele do vetor de likes do cartão e manda as informações do cartão para o servidor para atualização
-function removeLike(item, userId) {
-  item.likes = item.likes.filter((like) => {
-    if (like._id != userId) {
-      return true;
-    }
-  });
+//função parâmetro da classe Card
+function removeLike(item) {
+  item.isLiked = false;
   const cardId = item._id;
 
   api
-    .removeCardLike(item, cardId)
+    .removeCardLike(cardId)
     .then((res) => {
       if (res.ok) {
         return res.json();
@@ -70,7 +65,7 @@ function removeLike(item, userId) {
       console.log(error);
     });
 }
-//função parâmetro da classe PopupWithConfirmation. Ela deleta o card do servidor usando a instância da classe API e remove o card da árvore DOM
+//função parâmetro da classe PopupWithConfirmation. Ela deleta o card do servidor e remove o card da árvore DOM
 function removeCard(cardId, DOMElement) {
   api
     .deleteCard(cardId)
@@ -89,7 +84,7 @@ function removeCard(cardId, DOMElement) {
       console.log(error);
     });
 }
-//função parâmetro de Card dita o que ocorre quando se clica no delete icon
+//função parâmetro de Card
 function handleDeleteClick(cardId, DOMElement) {
   const popupWithConfirmation = new PopupWithConfirmation({
     popupSelector: ".popup-with-confirmation__container",
@@ -101,7 +96,7 @@ function handleDeleteClick(cardId, DOMElement) {
   popupWithConfirmation.open();
 }
 
-/* Busca usuário e depois disso coloca os cards na tela */
+/* Busca dados do usuário e adiciona os cards iniciais na tela */
 let user;
 let cardRenderer;
 let popupWithImage;
@@ -119,11 +114,8 @@ api
   })
   .then((result) => {
     user = result;
-
-    // Carrega informações do usuário na tela
     userInfo.setUserInfo(user);
 
-    /* Cartões iniciais sendo adicionados assim que a página carrega */
     api
       .getInitialCards()
       .then((res) => {
@@ -187,9 +179,8 @@ const editProfilePopupWithForm = new PopupWithForm({
     const button = document.querySelector(".edit-profile-popup__submit-button");
     button.textContent = "Salvando...";
 
-    //atualiza os dados do usuário no servidor
     api
-      .saveProfileInfo(name, about)
+      .saveProfileInfo({ name, about })
       .then((res) => {
         if (res.ok) {
           return res.json();
@@ -198,7 +189,6 @@ const editProfilePopupWithForm = new PopupWithForm({
       })
       .then((result) => {
         user = result;
-        //pega os dados atualizados do usuário e mostra na tela
         userInfo.setUserInfo(user);
       })
       .catch((error) => {
